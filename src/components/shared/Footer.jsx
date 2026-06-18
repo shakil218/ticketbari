@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { FaFacebook, FaXTwitter, FaInstagram, FaLinkedin } from "react-icons/fa6";
+import logo from "@/assets/ticketBari.webp";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -10,8 +12,8 @@ export default function Footer() {
           {/* Column 1 - Logo + Description */}
           <div>
             <div className="flex items-center gap-2 text-xl font-bold text-foreground">
-              <span className="text-2xl">🚆</span>
-              <span>TicketBari</span>
+              <Image src={logo} alt="TicketBari Logo" width={40} height={40} />
+              <span className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent">TicketBari</span>
             </div>
 
             <p className="mt-3 text-sm text-foreground/70">

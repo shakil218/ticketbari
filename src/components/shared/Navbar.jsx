@@ -9,6 +9,7 @@ import { ThemeSwitch } from "./ThemeSwitch";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const pathname = usePathname();
 
   const navLinks = [
@@ -33,7 +34,7 @@ export default function Navbar() {
           >
             {/* <span className="text-2xl">🚆</span> */}
             <Image src={logo} alt="TicketBari Logo" width={40} height={40} />
-            <span>TicketBari</span>
+            <span className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent">TicketBari</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -46,7 +47,7 @@ export default function Navbar() {
                     relative text-sm transition-colors duration-200
                     ${
                       isActive(link.href)
-                        ? "text-primary font-medium"
+                        ? "bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent border-b-2 border-purple-500 font-semibold"
                         : "text-foreground/70 hover:text-primary"
                     }
                   `}
@@ -67,10 +68,10 @@ export default function Navbar() {
             <ThemeSwitch />
             <div className="items-center gap-3 md:flex">
               <Link
-                href="/login"
-                className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+                href="/auth/signin"
+                className="rounded-lg bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 px-4 py-2 text-sm font-medium text-black transition hover:opacity-90"
               >
-                Login
+                Sign In
               </Link>
             </div>
             {/* Mobile Button */}

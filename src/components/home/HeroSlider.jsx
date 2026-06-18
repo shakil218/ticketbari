@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, EffectFade } from "swiper/modules";
+import { ShieldCheck } from "lucide-react";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -61,7 +62,9 @@ export default function HeroSlider() {
               {/* Content */}
               <div className="relative z-10 flex h-full items-center">
                 <div className="max-w-3xl px-8 md:px-16">
-                  <span className="mb-4 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-md">
+                  <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-md shadow-lg">
+                    {/* small green ShieldCheck icon */}
+                    <ShieldCheck size={16} className="text-green-400" />
                     Trusted Ticket Booking Platform
                   </span>
 
@@ -76,7 +79,7 @@ export default function HeroSlider() {
                   <div className="flex flex-wrap gap-4">
                     <Link
                       href="/tickets"
-                      className="rounded-xl bg-primary border border-white/40 px-6 py-3 font-medium text-white transition hover:scale-105"
+                      className="rounded-xl bg-blue-500 px-6 py-3 font-medium text-white transition hover:scale-105"
                     >
                       Find Tickets
                     </Link>
