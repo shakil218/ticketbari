@@ -1,60 +1,43 @@
 "use client";
 
 import Image from "next/image";
-import { Card,Button } from "@heroui/react";
+import { Card, Button } from "@heroui/react";
 
-export default function AdvertisementTickets() {
+export default function LatestTickets() {
   const tickets = [
     {
-      id: "t1",
-      title: "Dhaka to Cox's Bazar Bus",
-      price: 1200,
-      quantity: 35,
+      id: "l1",
+      title: "Dhaka → Sylhet Express Bus",
+      price: 950,
+      quantity: 42,
       transport: "AC Bus",
-      perks: ["WiFi", "Snacks", "Charging Port"],
-      image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+      perks: ["WiFi", "Charging", "Snacks"],
+      image:
+        "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=1600&q=80",
     },
     {
-      id: "t2",
-      title: "Dhaka to Chattogram Train",
-      price: 850,
-      quantity: 50,
+      id: "l2",
+      title: "Dhaka → Cox's Bazar Night Coach",
+      price: 1250,
+      quantity: 30,
+      transport: "Luxury Bus",
+      perks: ["Recliner Seat", "Blanket", "Water Bottle"],
+      image:
+        "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=1600&q=80",
+    },
+    {
+      id: "l3",
+      title: "Dhaka → Chattogram Train",
+      price: 780,
+      quantity: 60,
       transport: "Train",
-      perks: ["Sleeper Seat", "Food Included"],
+      perks: ["Sleeper", "Food"],
       image:
         "https://plus.unsplash.com/premium_photo-1661953343833-c691a9509d83?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
-      id: "t3",
-      title: "Dhaka City Air-conditioned Bus",
-      price: 150,
-      quantity: 80,
-      transport: "City Bus",
-      perks: ["AC", "Fast Route"],
-      image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957",
-    },
-    {
-      id: "t4",
-      title: "Dhaka to Sylhet Luxury Bus",
-      price: 1300,
-      quantity: 20,
-      transport: "Luxury Bus",
-      perks: ["Recliner Seat", "Blanket", "Snacks"],
-      image:
-        "https://images.unsplash.com/photo-1669360109634-8386c704a506?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: "t5",
-      title: "Launch Ticket Dhaka to Barisal",
-      price: 600,
-      quantity: 100,
-      transport: "Launch",
-      perks: ["Cabin", "Food Service"],
-      image: "https://images.unsplash.com/photo-1529070538774-1843cb3265df",
-    },
-    {
-      id: "t6",
-      title: "Dhaka Metro Rail Pass",
+      id: "l4",
+      title: "Dhaka City Metro Pass",
       price: 100,
       quantity: 200,
       transport: "Metro Rail",
@@ -62,12 +45,33 @@ export default function AdvertisementTickets() {
       image:
         "https://images.unsplash.com/photo-1704644246328-8ffe8d75885a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
+    {
+      id: "l5",
+      title: "Dhaka → Barisal Launch Cabin",
+      price: 650,
+      quantity: 80,
+      transport: "Launch",
+      perks: ["Cabin", "Food Service"],
+      image:
+        "https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1600&q=80",
+    },
+    {
+      id: "l6",
+      title: "Dhaka → Rajshahi AC Bus",
+      price: 900,
+      quantity: 55,
+      transport: "AC Bus",
+      perks: ["AC", "Comfort Seat"],
+      image:
+        "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1600&q=80",
+    },
   ];
 
   return (
-    <section className="w-full py-10 px-4 md:px-10 bg-gray-50 dark:bg-black">
-      <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-        Featured Tickets
+    <section className="w-full py-12 px-4 md:px-10 bg-white dark:bg-black">
+      {/* Heading */}
+      <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
+        Latest Tickets
       </h2>
 
       {/* Grid */}
@@ -75,7 +79,7 @@ export default function AdvertisementTickets() {
         {tickets.map((ticket) => (
           <Card
             key={ticket.id}
-            className="rounded-xl shadow-md hover:shadow-xl transition-all"
+            className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all"
           >
             {/* Image */}
             <div className="relative w-full h-40">
@@ -83,11 +87,12 @@ export default function AdvertisementTickets() {
                 src={ticket.image}
                 alt={ticket.title}
                 fill
-                className="object-cover rounded-t-xl"
+                className="object-cover"
               />
             </div>
 
-            <div className="space-y-2">
+            {/* Content */}
+            <div className="p-4 space-y-2">
               {/* Title */}
               <h3 className="text-lg font-semibold">{ticket.title}</h3>
 
@@ -100,16 +105,16 @@ export default function AdvertisementTickets() {
               <p className="text-sm text-gray-500">
                 Price:{" "}
                 <span className="font-semibold text-green-600">
-                  ${ticket.price}
+                  ৳{ticket.price}
                 </span>
               </p>
 
               <p className="text-sm text-gray-500">
-                Available: {ticket.quantity} tickets
+                Available: {ticket.quantity}
               </p>
 
               {/* Perks */}
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-2">
                 {ticket.perks.map((perk, i) => (
                   <span
                     key={i}
