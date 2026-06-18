@@ -40,7 +40,7 @@ export default function TicketBariCTA() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
               size="lg"
-              color="primary"
+              className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 text-black hover:opacity-90"
               onPress={() => router.push("/tickets")}
             >
               Explore Tickets

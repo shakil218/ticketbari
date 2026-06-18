@@ -71,7 +71,7 @@ export default function SearchBox() {
             <div className="flex items-end">
               <Button
                 type="submit"
-                className="flex w-full items-center justify-center gap-2 border border-divider rounded-xl bg-primary px-4 py-6 font-medium text-primary-foreground transition hover:opacity-90"
+                className="flex w-full items-center justify-center gap-2 border border-divider rounded-xl bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 px-4 py-6 font-medium text-black transition hover:opacity-90"
               >
                 <Search size={18} />
                 Search

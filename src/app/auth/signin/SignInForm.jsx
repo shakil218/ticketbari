@@ -11,36 +11,88 @@ import {
   Input,
   Label,
   Button,
+  Spinner,
   FieldError,
 } from "@heroui/react";
+import { toast } from "react-toastify";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignInForm() {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-
-    console.log("FORM DATA:", data);
+    const userInfo = Object.fromEntries(formData.entries());
 
     // =====================================================
-    // 🔐 BETTER AUTH LOGIC WILL GO HERE LATER
+    // TODO:🔐 BETTER AUTH LOGIC WILL GO HERE LATER
     // =====================================================
+    try {
+      setLoading(true);
+      const { data, error } = await authClient.signIn.email({
+        ...userInfo,
+        callbackURL: "/",
+        rememberMe: false,
+      });
 
-    router.push("/");
+      if (error) {
+        throw new Error(
+          error?.message || "Sign in failed. Please check your credentials.",
+        );
+      }
+
+      toast.success("Welcome back to TicketBari! Redirecting...", {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
+      router.push("/");
+    } catch (error) {
+      toast.error(error.message || "An unexpected error occurred.", {
+        position: "top-center",
+        autoClose: 4000,
+        theme: "colored",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Google Sign-In Handler
+  const handleGoogleLogin = async () => {
+    try {
+      const data = await authClient.signIn.social({
+        provider: "google",
+      });
+
+      if (data?.session) {
+        toast.success("Welcome back to TicketBari! Redirecting...", {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored",
+        });
+        router.push("/");
+      }
+    } catch (err) {
+      toast.error("Google authentication failed. Please try again.");
+    }
+    console.log(data,err);
   };
 
   return (
     <div className="flex items-center justify-center bg-background text-foreground px-4 py-16 transition-colors duration-300">
       <div className="space-y-6 w-full max-w-md bg-card text-card-foreground shadow-xl rounded-2xl p-8 border border-border">
-
         {/* Title */}
         <h1 className="text-2xl font-bold text-center">
-          Join <span className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent">TicketBari</span>
+          Welcome{" "}
+          <span className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent">
+            TicketBari
+          </span>
         </h1>
 
         <p className="text-sm text-muted-foreground text-center">
@@ -48,13 +100,16 @@ export default function SignInForm() {
         </p>
 
         {/* Google Button */}
-        <Button className="w-full" variant="tertiary">
+        <Button
+          onClick={handleGoogleLogin}
+          className="w-full"
+          variant="tertiary"
+        >
           <Icon icon="devicon:google" />
-          Sign in with Google
+          Continue with Google
         </Button>
 
         <Form onSubmit={onSubmit} className="space-y-4">
-
           {/* Email */}
           <TextField isRequired name="email" type="email">
             <Label>Email</Label>
@@ -108,9 +163,11 @@ export default function SignInForm() {
           {/* Submit */}
           <Button
             type="submit"
+            disabled={loading}
             className="w-full bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 text-black hover:opacity-90"
           >
-            Sign In
+            {loading ? <Spinner color="current" size="sm" /> : null}
+            {loading ? "Signing Account..." : "Sign In"}
           </Button>
 
           {/* Sign Up */}
@@ -118,12 +175,11 @@ export default function SignInForm() {
             Don&apos;t have an account?{" "}
             <span
               onClick={() => router.push("/auth/signup")}
-              className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent cursor-pointer font-medium"
+              className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent cursor-pointer font-medium hover:underline"
             >
               Sign Up here
             </span>
           </p>
-
         </Form>
       </div>
     </div>

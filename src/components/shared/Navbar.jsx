@@ -6,11 +6,17 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import logo from "@/assets/ticketBari.webp";
 import { ThemeSwitch } from "./ThemeSwitch";
+import { authClient } from "@/lib/auth-client";
+import { User, LogOut } from "lucide-react";
+import { Avatar, Button, Dropdown, Label,Spinner } from "@heroui/react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const pathname = usePathname();
+  const { data: session, isPending } = authClient.useSession();
+
+  const user = session?.user;
+  console.log(user);
 
   const navLinks = [
     { label: "Home", href: "/" },
@@ -66,7 +72,66 @@ export default function Navbar() {
           {/* Right Side */}
           <div className="flex items-center gap-4">
             <ThemeSwitch />
-            <div className="items-center gap-3 md:flex">
+            {
+              isPending ? (
+            <div className="flex items-center gap-2">
+              <Spinner color="warning" size="sm" />
+              <span className="text-xs text-muted">Loading...</span>
+            </div>
+          ) :user ? <Dropdown>
+      <Button
+        variant="light"
+        className="flex items-center gap-3 px-2"
+      >
+        <Image src={user?.image} alt={user?.name} width={35} height={35} className="rounded-full" />
+
+        <span className="hidden md:block font-medium">
+          {user?.name.split(" ")[0]}
+        </span>
+      </Button>
+
+      <Dropdown.Popover>
+        <Dropdown.Menu aria-label="User Menu">
+          {/* User Info */}
+          <Dropdown.Item
+            id="user-info"
+            textValue={user?.name}
+            isDisabled
+          >
+            <div className="flex flex-col">
+              <span className="font-medium">{user?.name}</span>
+              <span className="text-xs text-default-500">
+                {user?.email}
+              </span>
+            </div>
+          </Dropdown.Item>
+
+          {/* Profile */}
+          <Dropdown.Item
+            id="profile"
+            textValue="My Profile"
+          >
+            <div className="flex items-center gap-2">
+              <User size={16} />
+              <Label>My Profile</Label>
+            </div>
+          </Dropdown.Item>
+
+          {/* Logout */}
+          <Dropdown.Item
+            id="logout"
+            textValue="Logout"
+            variant="danger"
+            onPress={async () => await authClient.signOut()}
+          >
+            <div className="flex items-center text-danger gap-2">
+              <LogOut size={16} />
+              <Label>Sign Out</Label>
+            </div>
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown.Popover>
+    </Dropdown> : <div className="items-center gap-3 md:flex">
               <Link
                 href="/auth/signin"
                 className="rounded-lg bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 px-4 py-2 text-sm font-medium text-black transition hover:opacity-90"
@@ -74,6 +139,9 @@ export default function Navbar() {
                 Sign In
               </Link>
             </div>
+            }
+            
+
             {/* Mobile Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}

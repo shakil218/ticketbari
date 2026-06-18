@@ -12,26 +12,80 @@ import {
   Label,
   Button,
   FieldError,
+  Spinner,
 } from "@heroui/react";
+import { toast } from "react-toastify";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignUpForm() {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async(e) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-
-    console.log("FORM DATA:", data);
+    const userData = Object.fromEntries(formData.entries());
 
     // =====================================================
-    // 🔐 BETTER AUTH LOGIC WILL GO HERE LATER
+    // TODO:🔐 BETTER AUTH LOGIC WILL GO HERE LATER
     // =====================================================
+    try {
+      setLoading(true);
+      const { data, error } = await authClient.signUp.email({
+        ...userData,
+        role:"user",
+        callbackURL: "/",
+      });
+      console.log("user:", data);
 
-    router.push("/");
+      if (error) {
+        throw new Error(
+          error?.message ||
+            "Registration failed. Email might already be in use.",
+        );
+      }
+
+      toast.success("Account created successfully! Welcome to TicketBari.", {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
+      // router.push("/");
+    } catch (err) {
+      toast.error(
+        err.message || "An unexpected error occurred during signup.",
+        {
+          position: "top-center",
+          autoClose: 4000,
+          theme: "colored",
+        },
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //Google Sign-In Handler
+  const handleGoogleLogin = async () => {
+    try {
+      const data = await authClient.signIn.social({
+        provider: "google",
+      });
+
+      if (data?.session) {
+        toast.success("Welcome back to TicketBari! Redirecting...", {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored",
+        });
+        router.push("/");
+      }
+    } catch (err) {
+      toast.error("Google authentication failed. Please try again.");
+    }
   };
 
   return (
@@ -48,9 +102,9 @@ export default function SignUpForm() {
         </p>
 
         {/* Google Button */}
-        <Button className="w-full" variant="tertiary">
+        <Button className="w-full" variant="tertiary" onClick={handleGoogleLogin}>
           <Icon icon="devicon:google" />
-          Sign in with Google
+          Continue with Google
         </Button>
 
         <Form onSubmit={onSubmit} className="space-y-4">
@@ -115,9 +169,11 @@ export default function SignUpForm() {
           {/* Submit */}
           <Button
             type="submit"
+            disabled={loading}
             className="w-full bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 text-black hover:opacity-90"
           >
-            Create Account
+            {loading ? <Spinner color="current" size="sm" /> : null}
+            {loading ? "Creating Account..." : "Create Account"}
           </Button>
 
           {/* Login */}
@@ -125,7 +181,7 @@ export default function SignUpForm() {
             Already have an account?{" "}
             <span
               onClick={() => router.push("/auth/signin")}
-              className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent cursor-pointer font-medium"
+              className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent cursor-pointer font-medium hover:underline"
             >
               Sign In here
             </span>

@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@heroui/react";
+import { useRouter } from "next/navigation";
 const routes = [
   {
     from: "Dhaka",
@@ -40,6 +41,7 @@ const routes = [
 ];
 
 export default function PopularRoutes() {
+  const router = useRouter();
   return (
     <section className="w-full py-12 px-4 md:px-10 bg-background text-foreground">
       {/* Title */}
@@ -71,8 +73,7 @@ export default function PopularRoutes() {
 
             {/* Button */}
             <Button
-              className="w-full mt-4"
-              color="primary"
+              className="w-full mt-4 bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 text-black hover:opacity-90"
               onPress={() =>
                 router.push(
                   `/tickets?from=${route.from}&to=${route.to}`

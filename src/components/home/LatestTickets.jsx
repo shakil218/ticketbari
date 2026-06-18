@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Card, Button } from "@heroui/react";
+import { useRouter } from "next/navigation";
 
 const tickets = [
   {
@@ -67,6 +68,7 @@ const tickets = [
 ];
 
 export default function LatestTickets() {
+  const router = useRouter();
   return (
     <section className="w-full py-12 px-4 md:px-10 bg-background text-foreground">
       {/* Heading */}
@@ -133,8 +135,7 @@ export default function LatestTickets() {
 
               {/* Button */}
               <Button
-                className="w-full mt-3"
-                color="primary"
+                className="w-full mt-3 bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 text-black hover:opacity-90"
                 onPress={() => router.push(`/tickets/${ticket.id}`)}
               >
                 See Details

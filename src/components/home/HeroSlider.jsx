@@ -79,7 +79,7 @@ export default function HeroSlider() {
                   <div className="flex flex-wrap gap-4">
                     <Link
                       href="/tickets"
-                      className="rounded-xl bg-blue-500 px-6 py-3 font-medium text-white transition hover:scale-105"
+                      className="rounded-xl bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 px-6 py-3 font-medium text-black transition hover:scale-105"
                     >
                       Find Tickets
                     </Link>
