@@ -1,6 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { Button } from "@heroui/react";
 
 export default function SearchBox() {
   return (
@@ -68,13 +69,13 @@ export default function SearchBox() {
 
             {/* Search Button */}
             <div className="flex items-end">
-              <button
+              <Button
                 type="submit"
-                className="flex w-full items-center justify-center gap-2 border border-divider rounded-xl bg-primary px-4 py-3 font-medium text-primary-foreground transition hover:opacity-90"
+                className="flex w-full items-center justify-center gap-2 border border-divider rounded-xl bg-primary px-4 py-6 font-medium text-primary-foreground transition hover:opacity-90"
               >
                 <Search size={18} />
                 Search
-              </button>
+              </Button>
             </div>
 
           </form>

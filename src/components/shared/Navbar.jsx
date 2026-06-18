@@ -3,6 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
+import logo from "@/assets/ticketBari.webp";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,13 +26,13 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 border-b border-divider bg-background/80 backdrop-blur-lg">
       <div className="container mx-auto">
         <header className="flex h-16 items-center justify-between px-4">
-
           {/* Logo */}
           <Link
             href="/"
             className="flex items-center gap-2 text-xl font-bold text-foreground"
           >
-            <span className="text-2xl">🚆</span>
+            {/* <span className="text-2xl">🚆</span> */}
+            <Image src={logo} alt="TicketBari Logo" width={40} height={40} />
             <span>TicketBari</span>
           </Link>
 
@@ -60,23 +63,25 @@ export default function Navbar() {
           </ul>
 
           {/* Right Side */}
-          <div className="hidden items-center gap-3 md:flex">
-            <Link
-              href="/login"
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+          <div className="flex items-center gap-4">
+            <ThemeSwitch />
+            <div className="items-center gap-3 md:flex">
+              <Link
+                href="/login"
+                className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+              >
+                Login
+              </Link>
+            </div>
+            {/* Mobile Button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="rounded-lg p-2 text-foreground md:hidden"
+              aria-label="Toggle Menu"
             >
-              Login
-            </Link>
+              {isMenuOpen ? "✕" : "☰"}
+            </button>
           </div>
-
-          {/* Mobile Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="rounded-lg p-2 text-foreground md:hidden"
-            aria-label="Toggle Menu"
-          >
-            {isMenuOpen ? "✕" : "☰"}
-          </button>
         </header>
 
         {/* Mobile Menu */}

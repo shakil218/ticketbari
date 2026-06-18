@@ -37,7 +37,7 @@ export default function TicketBariCTA() {
           </p>
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
               size="lg"
               color="primary"
@@ -49,7 +49,7 @@ export default function TicketBariCTA() {
             <Button
               size="lg"
               variant="bordered"
-              className="border-white text-white"
+              className="border border-white/20 text-white"
               onPress={() => router.push("/routes")}
             >
               View Routes

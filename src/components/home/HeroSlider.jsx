@@ -8,29 +8,30 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 
-export default function HeroSlider() {
-  const heroSlides = [
-    {
-      id: 1,
-      title: "Book Tickets Across Bangladesh",
-      description: "Find bus, train, launch and flight tickets in seconds.",
-      image: "https://images.unsplash.com/photo-1739240020798-adfe4d3aaf8f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?auto=format&fit=crop&w=1600&q=80",
-    },
-    {
-      id: 2,
-      title: "Travel Smarter, Travel Faster",
-      description: "Compare schedules, prices and routes from trusted vendors.",
-      image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-    },
-    {
-      id: 3,
-      title: "Become a Ticket Vendor",
-      description:
-        "Manage your routes, schedules and bookings from one dashboard.",
-      image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828",
-    },
-  ];
+const heroSlides = [
+  {
+    id: 1,
+    title: "Book Tickets Across Bangladesh",
+    description: "Find bus, train, launch and flight tickets in seconds.",
+    image:
+      "https://images.unsplash.com/photo-1739240020798-adfe4d3aaf8f?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    id: 2,
+    title: "Travel Smarter, Travel Faster",
+    description: "Compare schedules, prices and routes from trusted vendors.",
+    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+  },
+  {
+    id: 3,
+    title: "Become a Ticket Vendor",
+    description:
+      "Manage your routes, schedules and bookings from one dashboard.",
+    image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828",
+  },
+];
 
+export default function HeroSlider() {
   return (
     <section className="overflow-hidden">
       <Swiper
@@ -75,7 +76,7 @@ export default function HeroSlider() {
                   <div className="flex flex-wrap gap-4">
                     <Link
                       href="/tickets"
-                      className="rounded-xl bg-primary px-6 py-3 font-medium text-white transition hover:scale-105"
+                      className="rounded-xl bg-primary border border-white/40 px-6 py-3 font-medium text-white transition hover:scale-105"
                     >
                       Find Tickets
                     </Link>
