@@ -72,9 +72,13 @@ export default function LatestTickets() {
   return (
     <section className="w-full py-12 px-4 md:px-10 bg-background text-foreground">
       {/* Heading */}
-      <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-        Latest Tickets
-      </h2>
+      <div className="flex flex-col items-center mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold">Latest Tickets</h2>
+
+        <p className="text-default-500 mt-1">
+          Stay updated with the latest ticket listings and travel opportunities.
+        </p>
+      </div>
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
