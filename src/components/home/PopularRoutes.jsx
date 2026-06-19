@@ -132,7 +132,7 @@ export default function PopularRoutes() {
           </div>
 
           {/* CTA Card */}
-          <div className="rounded-2xl border border-divider bg-content1 p-8 flex flex-col items-center justify-center text-center md:col-span-2 min-h-50">
+          <div className="rounded-2xl border border-divider bg-content1 p-8 flex flex-col items-center justify-center text-center md:col-span-2 min-h-50 bg-linear-to-r from-violet-200/10 via-purple-300/10 to-purple-500/10">
             <div className="w-14 h-14 rounded-full bg-linear-to-r from-violet-200/20 via-purple-300/20 to-purple-500/20 flex items-center justify-center mb-4">
               <MapPinned className="w-7 h-7 text-purple-500" />
             </div>

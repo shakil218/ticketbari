@@ -4,11 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import logo from "@/assets/ticketBari.webp";
+import logo from "@/assets/logo.png";
+import demoUser from "@/assets/demoUser.png";
 import { ThemeSwitch } from "./ThemeSwitch";
 import { authClient } from "@/lib/auth-client";
 import { User, LogOut } from "lucide-react";
-import { Avatar, Button, Dropdown, Label, Spinner } from "@heroui/react";
+import { Button, Dropdown, Label, Spinner } from "@heroui/react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,13 +17,18 @@ export default function Navbar() {
   const { data: session, isPending } = authClient.useSession();
 
   const user = session?.user;
-  console.log(user);
 
   const navLinks = [
     { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
     { label: "All Tickets", href: "/tickets" },
-    { label: "Dashboard", href: "/dashboard" },
+    { label: "Contact", href: "/contact" },
   ];
+
+  if (user?.email) {
+    navLinks[3] = { label: "Dashboard", href: "/dashboard/vendor" };
+    navLinks[4] = { label: "Contact", href: "/contact" };
+  }
 
   const isActive = (href) => {
     if (href === "/") return pathname === "/";
@@ -38,7 +44,6 @@ export default function Navbar() {
             href="/"
             className="flex items-center gap-2 text-xl font-bold text-foreground"
           >
-            {/* <span className="text-2xl">🚆</span> */}
             <Image src={logo} alt="TicketBari Logo" width={40} height={40} />
             <span className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent">
               TicketBari
@@ -90,7 +95,7 @@ export default function Navbar() {
                   </span>
 
                   <Image
-                    src={user?.image}
+                    src={user?.image || demoUser}
                     alt={user?.name}
                     width={35}
                     height={35}
@@ -127,7 +132,7 @@ export default function Navbar() {
                       id="logout"
                       textValue="Logout"
                       variant="danger"
-                      onPress={async () => await authClient.signOut()}
+                      onClick={async () => await authClient.signOut()}
                     >
                       <div className="flex items-center text-danger gap-2">
                         <LogOut size={16} />
@@ -172,8 +177,8 @@ export default function Navbar() {
                       block rounded-lg px-3 py-3 text-sm
                       ${
                         isActive(link.href)
-                          ? "bg-default-100 text-primary font-medium"
-                          : "text-foreground/70 hover:bg-default-100 hover:text-primary"
+                          ? "bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent border-b-2 border-purple-500 font-semibold"
+                          : "text-foreground/70 hover:text-primary"
                       }
                     `}
                   >
@@ -184,11 +189,11 @@ export default function Navbar() {
 
               <li className="mt-2">
                 <Link
-                  href="/login"
+                  href="/auth/signin"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block rounded-lg bg-primary px-4 py-3 text-center text-sm font-medium text-primary-foreground"
+                  className="block rounded-lg bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 px-4 py-2 text-center text-sm font-medium text-black transition hover:opacity-90"
                 >
-                  Login
+                  Sign In
                 </Link>
               </li>
             </ul>
