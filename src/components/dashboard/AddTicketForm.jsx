@@ -1,40 +1,44 @@
 "use client";
 import React, { useState } from "react";
-import { 
-  Form, 
-  TextField, 
-  Label, 
-  Input, 
-  Select, 
+import {
+  Form,
+  TextField,
+  Label,
+  Input,
+  Select,
   ListBox,
-  CheckboxGroup, 
-  Checkbox, 
+  CheckboxGroup,
+  Checkbox,
   Button,
   Card,
-  FieldError
+  FieldError,
 } from "@heroui/react";
-import { 
-  Plus, 
-  UploadCloud, 
-  Bus, 
-  MapPin, 
-  Calendar, 
-  DollarSign, 
-  Layers, 
-  User, 
-  Mail, 
+import {
+  Plus,
+  UploadCloud,
+  Bus,
+  MapPin,
+  Calendar,
+  DollarSign,
+  Layers,
+  User,
+  Mail,
   Heading,
   Wifi,
   Wind,
   Utensils,
   BatteryCharging,
-  ChevronDown
+  ChevronDown,
 } from "lucide-react";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
+import { createTicket } from "@/lib/actions/ticket";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function AddTicketForm() {
-  const {data:session, isPending} = authClient.useSession();
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
   const vendorInfo = {
     name: user?.name,
@@ -60,56 +64,71 @@ export default function AddTicketForm() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Capture simple form entries
-    const formFields = Object.fromEntries(new FormData(e.currentTarget));
+    // Capture the form reference securely before async tasks alter the event loop
+    const formElement = e.currentTarget;
+    const formFields = Object.fromEntries(new FormData(formElement));
 
     try {
-      let imageUrl = "sagfgjl;algaldsl";
-      
+      let imageUrl = "";
+
       // Image upload routine to ImgBB
-      // if (imageFile) {
-      //   const imgData = new FormData();
-      //   const IMGBB_API_KEY = "YOUR_IMGBB_API_KEY"; 
-      //   imgData.append("image", imageFile);
+      if (imageFile) {
+        const imgData = new FormData();
+        const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
+        imgData.append("image", imageFile);
 
-      //   const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=%7BYOUR_IMGBB_API_KEY%7D`, {
-      //     method: "POST",
-      //     body: imgData,
-      //   });
-      //   const imgbbResult = await imgbbResponse.json();
-      //   if (imgbbResult.success) {
-      //     imageUrl = imgbbResult.data.url;
-      //   }
-      // }
+        const imgbbResponse = await fetch(
+          `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
+          {
+            method: "POST",
+            body: imgData,
+          },
+        );
+        const imgbbResult = await imgbbResponse.json();
+        if (imgbbResult.success) {
+          imageUrl = imgbbResult.data.url;
+        }
+      }
 
-      // Merge standard entries with local component array state
+      // Merge standard entries with session fallback metrics
       const ticketPayload = {
         title: formFields.ticketTitle,
         from: formFields.fromLocation,
         to: formFields.arrivalDestination,
-        transportType: transportType, 
+        transportType: transportType,
         price: parseFloat(formFields.price),
         quantity: parseInt(formFields.quantity),
         departureTime: formFields.departureDateTime,
-        perks: perks,                 
+        perks: perks,
         imageUrl: imageUrl,
-        vendorName: vendorInfo.name,  
-        vendorEmail: vendorInfo.email, 
-        status: "pending" 
+        vendorName: vendorInfo.name || "Unknown Vendor",
+        vendorEmail: vendorInfo.email || "Unknown Email",
+        status: "pending",
       };
 
-      console.log("Submitting Ticket Payload:", ticketPayload);
-      // alert("Ticket saved successfully with verification status: pending!");
+      const res = await createTicket(ticketPayload);
       
-      // Clear all state forms cleanly
-      // setTransportType("");
-      // setPerks([]);
-      // setImageFile(null);
-      // setImagePreview("");
-      // e.target.reset();
-
+      if (res?.insertedId) {
+        toast.success(
+          "Ticket created and saved successfully with verification status: pending!",
+        );
+        
+        // 1. Reset local state tracks
+        setTransportType("");
+        setPerks([]);
+        setImageFile(null);
+        setImagePreview("");
+        
+        // 2. Clear native input form values safely using our stable reference
+        formElement.reset();
+        
+        // 3. Fire the router transition push 
+        router.push("/dashboard/vendor/tickets");
+      } else {
+        toast.error("Failed to save the ticket layout configuration.");
+      }
     } catch (error) {
-      console.error("Error creating ticket:", error);
+      toast.error("An unexpected validation or database error occurred.");
     } finally {
       setIsSubmitting(false);
     }
@@ -118,32 +137,45 @@ export default function AddTicketForm() {
   return (
     <div className="min-h-screen bg-background text-foreground py-10 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-6xl mx-auto">
-        
         {/* Header Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Add New Ticket</h1>
-          <p className="text-sm text-default-500 mt-1">Create a new listing for your transport service.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Add New Ticket
+          </h1>
+          <p className="text-sm text-default-500 mt-1">
+            Create a new listing for your transport service.
+          </p>
         </div>
 
         {/* Hero UI Native Form Container */}
-        <Form onSubmit={handleSubmit} validationBehavior="native" className="w-full">
+        <Form
+          onSubmit={handleSubmit}
+          validationBehavior="native"
+          className="w-full"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full items-start">
-            
             {/* LEFT COLUMN */}
             <div className="col-span-1 lg:col-span-7 space-y-6">
-              
               {/* VENDOR DETAILS */}
               <Card className="p-6 border border-divider">
                 <Card.Content className="space-y-4">
-                  <h2 className="text-xs font-bold uppercase tracking-wider text-default-500 mb-2">Vendor Details</h2>
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-default-500 mb-2">
+                    Vendor Details
+                  </h2>
                   {/* vendor name field */}
-                  <TextField 
-                    isReadOnly 
-                    name="vendorName" 
-                    value={isPending ? "Vendor Name" : (vendorInfo.name || "Vendor Name")} 
+                  <TextField
+                    isReadOnly
+                    name="vendorName"
+                    value={
+                      isPending
+                        ? "Vendor Name"
+                        : vendorInfo.name || "Vendor Name"
+                    }
                     className="w-full"
                   >
-                    <Label className="text-sm font-medium block mb-1.5 text-default-700">Vendor Name</Label>
+                    <Label className="text-sm font-medium block mb-1.5 text-default-700">
+                      Vendor Name
+                    </Label>
                     <div className="relative flex items-center">
                       <User className="absolute left-3 text-default-400 w-4 h-4" />
                       <Input className="w-full pl-9 pr-3 py-2 bg-default-100 rounded-lg border-none focus:outline-none cursor-not-allowed opacity-80" />
@@ -151,13 +183,19 @@ export default function AddTicketForm() {
                   </TextField>
 
                   {/* Vendor Email Field */}
-                  <TextField 
-                    isReadOnly 
-                    name="vendorEmail" 
-                    value={isPending ? "vendor@example.com" : (vendorInfo.email || "vendor@example.com")} 
+                  <TextField
+                    isReadOnly
+                    name="vendorEmail"
+                    value={
+                      isPending
+                        ? "vendor@example.com"
+                        : vendorInfo.email || "vendor@example.com"
+                    }
                     className="w-full"
                   >
-                    <Label className="text-sm font-medium block mb-1.5 text-default-700">Contact Email</Label>
+                    <Label className="text-sm font-medium block mb-1.5 text-default-700">
+                      Contact Email
+                    </Label>
                     <div className="relative flex items-center">
                       <Mail className="absolute left-3 text-default-400 w-4 h-4" />
                       <Input className="w-full pl-9 pr-3 py-2 bg-default-100 rounded-lg border-none focus:outline-none cursor-not-allowed opacity-80" />
@@ -169,21 +207,26 @@ export default function AddTicketForm() {
               {/* JOURNEY DETAILS */}
               <Card className="p-6 border border-divider">
                 <Card.Content className="space-y-5">
-                  <h2 className="text-xs font-bold uppercase tracking-wider text-default-500 mb-1">Journey Details</h2>
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-default-500 mb-1">
+                    Journey Details
+                  </h2>
 
                   {/* Ticket Title */}
                   <TextField isRequired name="ticketTitle" className="w-full">
                     <div className="relative flex items-center">
                       <Heading className="absolute left-3 text-default-400 w-4 h-4" />
-                      <Input placeholder="e.g., Express Bus to City Center" className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-transparent" />
+                      <Input
+                        placeholder="e.g., Express Bus to City Center"
+                        className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-transparent"
+                      />
                     </div>
                     <FieldError className="text-xs text-danger mt-1" />
                   </TextField>
 
                   {/* Transport Select */}
-                  <Select 
-                    isRequired 
-                    name="transportType" 
+                  <Select
+                    isRequired
+                    name="transportType"
                     placeholder="Select Transport Type"
                     value={transportType}
                     onChange={(val) => setTransportType(val)}
@@ -198,13 +241,37 @@ export default function AddTicketForm() {
                         <ChevronDown className="w-4 h-4 text-default-400" />
                       </Select.Indicator>
                     </Select.Trigger>
-                    
+
                     <Select.Popover>
                       <ListBox className="bg-content1 border border-divider rounded-lg shadow-md p-1 min-w-50">
-                        <ListBox.Item id="Bus" textValue="Bus" className="px-3 py-2 hover:bg-default-100 dark:hover:bg-default-800 rounded-md cursor-pointer text-sm">Bus</ListBox.Item>
-                        <ListBox.Item id="Train" textValue="Train" className="px-3 py-2 hover:bg-default-100 dark:hover:bg-default-800 rounded-md cursor-pointer text-sm">Train</ListBox.Item>
-                        <ListBox.Item id="Launch&Ship" textValue="Launch / Ship" className="px-3 py-2 hover:bg-default-100 dark:hover:bg-default-800 rounded-md cursor-pointer text-sm">Launch / Ship</ListBox.Item>
-                        <ListBox.Item id="Air" textValue="Air" className="px-3 py-2 hover:bg-default-100 dark:hover:bg-default-800 rounded-md cursor-pointer text-sm">Air</ListBox.Item>
+                        <ListBox.Item
+                          id="Bus"
+                          textValue="Bus"
+                          className="px-3 py-2 hover:bg-default-100 dark:hover:bg-default-800 rounded-md cursor-pointer text-sm"
+                        >
+                          Bus
+                        </ListBox.Item>
+                        <ListBox.Item
+                          id="Train"
+                          textValue="Train"
+                          className="px-3 py-2 hover:bg-default-100 dark:hover:bg-default-800 rounded-md cursor-pointer text-sm"
+                        >
+                          Train
+                        </ListBox.Item>
+                        <ListBox.Item
+                          id="Launch&Ship"
+                          textValue="Launch / Ship"
+                          className="px-3 py-2 hover:bg-default-100 dark:hover:bg-default-800 rounded-md cursor-pointer text-sm"
+                        >
+                          Launch / Ship
+                        </ListBox.Item>
+                        <ListBox.Item
+                          id="Air"
+                          textValue="Air"
+                          className="px-3 py-2 hover:bg-default-100 dark:hover:bg-default-800 rounded-md cursor-pointer text-sm"
+                        >
+                          Air
+                        </ListBox.Item>
                       </ListBox>
                     </Select.Popover>
                   </Select>
@@ -212,29 +279,50 @@ export default function AddTicketForm() {
                   {/* Route Timeline Maps */}
                   <div className="relative space-y-5">
                     <div className="absolute left-4.5 top-5 bottom-5 w-[1.5px] border-l-2 border-dashed border-divider z-0"></div>
-                    
-                    <TextField isRequired name="fromLocation" className="w-full z-10">
+
+                    <TextField
+                      isRequired
+                      name="fromLocation"
+                      className="w-full z-10"
+                    >
                       <div className="relative flex items-center">
                         <MapPin className="absolute left-3 text-default-400 w-4 h-4" />
-                        <Input placeholder="Departure Location" className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-background" />
+                        <Input
+                          placeholder="Departure Location"
+                          className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-background"
+                        />
                       </div>
                       <FieldError className="text-xs text-danger mt-1" />
                     </TextField>
 
-                    <TextField isRequired name="arrivalDestination" className="w-full z-10">
+                    <TextField
+                      isRequired
+                      name="arrivalDestination"
+                      className="w-full z-10"
+                    >
                       <div className="relative flex items-center">
                         <MapPin className="absolute left-3 text-success w-4 h-4" />
-                        <Input placeholder="Arrival Destination" className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-background" />
+                        <Input
+                          placeholder="Arrival Destination"
+                          className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-background"
+                        />
                       </div>
                       <FieldError className="text-xs text-danger mt-1" />
                     </TextField>
                   </div>
 
                   {/* Date Time */}
-                  <TextField isRequired name="departureDateTime" className="w-full">
+                  <TextField
+                    isRequired
+                    name="departureDateTime"
+                    className="w-full"
+                  >
                     <div className="relative flex items-center">
                       <Calendar className="absolute left-3 text-default-400 w-4 h-4" />
-                      <Input type="datetime-local" className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-transparent" />
+                      <Input
+                        type="datetime-local"
+                        className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-transparent"
+                      />
                     </div>
                     <FieldError className="text-xs text-danger mt-1" />
                   </TextField>
@@ -244,24 +332,36 @@ export default function AddTicketForm() {
 
             {/* RIGHT COLUMN */}
             <div className="col-span-1 lg:col-span-5 space-y-6">
-              
               {/* PRICING & QUANTITY */}
               <Card className="p-6 border border-divider">
                 <Card.Content className="grid grid-cols-2 gap-4">
                   <TextField isRequired name="price">
-                    <Label className="text-xs font-medium block mb-1 text-default-600">Price per Unit ($)</Label>
+                    <Label className="text-xs font-medium block mb-1 text-default-600">
+                      Price per Unit ($)
+                    </Label>
                     <div className="relative flex items-center">
                       <DollarSign className="absolute left-3 text-default-400 w-4 h-4" />
-                      <Input type="number" step="0.01" placeholder="0.00" className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-transparent" />
+                      <Input
+                        type="number"
+                        step="0.01"
+                        placeholder="0.00"
+                        className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-transparent"
+                      />
                     </div>
                     <FieldError className="text-xs text-danger mt-1" />
                   </TextField>
 
                   <TextField isRequired name="quantity">
-                    <Label className="text-xs font-medium block mb-1 text-default-600">Quantity</Label>
+                    <Label className="text-xs font-medium block mb-1 text-default-600">
+                      Quantity
+                    </Label>
                     <div className="relative flex items-center">
                       <Layers className="absolute left-3 text-default-400 w-4 h-4" />
-                      <Input type="number" placeholder="Qty" className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-transparent" />
+                      <Input
+                        type="number"
+                        placeholder="Qty"
+                        className="w-full pl-9 pr-3 py-2 rounded-lg border border-default-300 dark:border-default-600 bg-transparent"
+                      />
                     </div>
                     <FieldError className="text-xs text-danger mt-1" />
                   </TextField>
@@ -277,10 +377,11 @@ export default function AddTicketForm() {
                     onChange={(values) => setPerks(values)}
                     className="gap-2"
                   >
-                    <Label className="text-xs font-bold uppercase tracking-wider text-default-500 mb-2 block">Included Perks</Label>
-                    
+                    <Label className="text-xs font-bold uppercase tracking-wider text-default-500 mb-2 block">
+                      Included Perks
+                    </Label>
+
                     <div className="grid grid-cols-2 gap-x-6 gap-y-4 w-full">
-                      
                       {/* AC Perk */}
                       <Checkbox value="AC">
                         <Checkbox.Content className="flex items-center gap-2 text-sm text-default-700 dark:text-default-300">
@@ -316,7 +417,6 @@ export default function AddTicketForm() {
                           <span>Charging</span>
                         </Checkbox.Content>
                       </Checkbox>
-
                     </div>
                   </CheckboxGroup>
                 </Card.Content>
@@ -325,17 +425,19 @@ export default function AddTicketForm() {
               {/* IMAGE SELECTION BLOCK */}
               <Card className="p-6 border border-divider">
                 <Card.Content>
-                  <h2 className="text-xs font-bold uppercase tracking-wider text-default-500 mb-3">Display Image</h2>
-                  
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-default-500 mb-3">
+                    Display Image
+                  </h2>
+
                   <label className="flex flex-col items-center justify-center w-full h-44 border-2 border-dashed border-default-300 dark:border-default-700 rounded-xl cursor-pointer hover:bg-default-50 dark:hover:bg-default-900 transition-all relative overflow-hidden group">
                     {imagePreview ? (
-                      <div className="absolute inset-0 w-full h-full">
-                        <Image 
-                          src={imagePreview} 
-                          alt="Preview" 
+                      <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+                        <Image
+                          src={imagePreview}
+                          alt="Preview"
                           width={400}
                           height={400}
-                          className="w-20 h-20 object-cover"
+                          className="w-20 h-20 object-cover rounded-full"
                         />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium">
                           Change Cover Image
@@ -344,14 +446,18 @@ export default function AddTicketForm() {
                     ) : (
                       <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
                         <UploadCloud className="w-8 h-8 text-default-400 mb-2" />
-                        <p className="text-sm text-default-600 dark:text-default-300 font-medium">Upload a cover image for this ticket</p>
-                        <p className="text-xs text-default-400 mt-1">Supports PNG, JPG or WEBP</p>
+                        <p className="text-sm text-default-600 dark:text-default-300 font-medium">
+                          Upload a cover image for this ticket
+                        </p>
+                        <p className="text-xs text-default-400 mt-1">
+                          Supports PNG, JPG or WEBP
+                        </p>
                       </div>
                     )}
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      className="hidden" 
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
                       onChange={handleImageChange}
                     />
                   </label>
@@ -370,12 +476,9 @@ export default function AddTicketForm() {
                   Create Ticket Listing
                 </Button>
               </div>
-
             </div>
-
           </div>
         </Form>
-
       </div>
     </div>
   );
