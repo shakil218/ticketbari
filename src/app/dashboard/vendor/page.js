@@ -3,8 +3,8 @@ import LoadingSpinner from "@/app/loading";
 import VendorProfile from "@/components/dashboard/VendorProfile";
 import { authClient } from "@/lib/auth-client";
 
-export default async function Page() {
-  const {data:session, isPending} = await authClient.useSession()
+export default function Page() {
+  const {data:session, isPending} = authClient.useSession()
 
   const user = session?.user;
   console.log(user)
