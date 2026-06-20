@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
-import { createTicket } from "@/lib/actions/ticket";
+import { createTicket } from "@/lib/actions/tickets";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 

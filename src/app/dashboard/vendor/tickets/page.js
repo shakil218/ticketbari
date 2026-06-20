@@ -1,11 +1,20 @@
-import React from 'react';
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { getVendorTickets } from "@/lib/api/tickets";
+import VendorTickets from "@/components/dashboard/VendorTickets"
 
-const MyAddedTicketsPage = () => {
+const VendorTicketsPage = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const tickets = await getVendorTickets(session?.user?.email);
+
   return (
     <div>
-      My added tickets now cooked!
+      <VendorTickets totalTickets={tickets}/>
     </div>
   );
 };
 
-export default MyAddedTicketsPage;
+export default VendorTicketsPage;
