@@ -86,6 +86,7 @@ export default function SignUpForm() {
     } catch (err) {
       toast.error("Google authentication failed. Please try again.");
     }
+    console.log("data",data);
   };
 
   return (

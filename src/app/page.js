@@ -11,9 +11,9 @@ export default function HomePage() {
     <>
       <HeroSlider />
       <SearchBox />
-      <AdvertisementTickets />
-      <PopularRoutes />
       <LatestTickets />
+      <PopularRoutes />
+      <AdvertisementTickets />
       <WhyChooseUs /> 
       <TicketBariCTA />
     </>

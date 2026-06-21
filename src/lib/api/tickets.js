@@ -1,6 +1,9 @@
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
+import { serverFetch } from "../core/server";
+
+export const getAllTickets = async()=>{
+  return serverFetch('/api/tickets')
+}
 
 export const getVendorTickets = async (vendorEmail) => {
-  const res = await fetch(`${baseURL}/api/tickets?vendorId=${vendorEmail}`);
-  return res.json();
+  return serverFetch(`/api/tickets?email=${vendorEmail}`)
 };

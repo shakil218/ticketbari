@@ -115,11 +115,11 @@ export default function VendorTickets({ totalTickets }) {
                       <div className="space-y-2 text-sm text-default-600 dark:text-default-300 relative pl-4">
                         <div className="absolute left-0 top-2 bottom-2 w-0.5 border-l border-dashed border-default-300"></div>
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-3.5 h-3.5 text-default-400 flex-shrink-0" />
+                          <MapPin className="w-3.5 h-3.5 text-default-400 shrink-0" />
                           <span className="truncate">From: <strong>{ticket.from}</strong></span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <MapPin className="w-3.5 h-3.5 text-success flex-shrink-0" />
+                          <MapPin className="w-3.5 h-3.5 text-success shrink-0" />
                           <span className="truncate">To: <strong>{ticket.to}</strong></span>
                         </div>
                       </div>

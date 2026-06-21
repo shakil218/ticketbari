@@ -1,14 +1,11 @@
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { getUserSession } from "@/lib/core/session";
 import { getVendorTickets } from "@/lib/api/tickets";
-import VendorTickets from "@/components/dashboard/VendorTickets"
+import VendorTickets from "@/components/dashboard/VendorTickets";
 
 const VendorTicketsPage = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const user = await getUserSession();
 
-  const tickets = await getVendorTickets(session?.user?.email);
+  const tickets = await getVendorTickets(user?.email);
 
   return (
     <div>

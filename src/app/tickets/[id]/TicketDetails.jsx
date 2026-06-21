@@ -28,7 +28,7 @@ export default function TicketDetails() {
         {/* LEFT */}
         <div className="space-y-6">
           {/* Image */}
-          <div className="relative h-[250px] md:h-[400px] overflow-hidden rounded-2xl">
+          <div className="relative h-62.5 md:h-100 overflow-hidden rounded-2xl">
             <Image
               src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1400"
               alt="Bus"
@@ -58,7 +58,7 @@ export default function TicketDetails() {
                 </span>
 
                 <h1 className="text-3xl font-bold mt-3">
-                  Dhaka to Cox's Bazar
+                  Dhaka to Cox&aposs Bazar
                 </h1>
               </div>
 
@@ -100,7 +100,7 @@ export default function TicketDetails() {
                 <div className="w-full flex items-center mt-3">
                   <div className="w-3 h-3 rounded-full bg-foreground" />
 
-                  <div className="flex-1 h-[2px] bg-default-300" />
+                  <div className="flex-1 h-0.5 bg-default-300" />
 
                   <div className="w-3 h-3 rounded-full bg-foreground" />
                 </div>
@@ -121,7 +121,7 @@ export default function TicketDetails() {
                 </p>
 
                 <p className="font-semibold mt-2">
-                  Cox's Bazar
+                  Cox&aposs Bazar
                 </p>
               </div>
             </div>

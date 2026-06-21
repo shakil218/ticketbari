@@ -1,11 +1,8 @@
-import React from 'react';
+import AllTicketsClient from "@/components/tickets/AllTicketsClient";
+import { getAllTickets } from "@/lib/api/tickets";
 
-const page = () => {
-  return (
-    <div>
-      All Tickets Are coming soon!
-    </div>
-  );
-};
+export default async function AllTicketsPage() {
+  const tickets = await getAllTickets();
 
-export default page;
+  return <AllTicketsClient tickets={tickets} />;
+}

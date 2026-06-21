@@ -71,6 +71,8 @@ export default function LatestTickets() {
   const router = useRouter();
   return (
     <section className="w-full py-12 px-4 md:px-10 bg-background text-foreground">
+      <div  className="max-w-7xl mx-auto">
+
       {/* Heading */}
       <div className="flex flex-col items-center mb-8">
         <h2 className="text-2xl md:text-3xl font-bold">Latest Tickets</h2>
@@ -147,6 +149,7 @@ export default function LatestTickets() {
             </div>
           </Card>
         ))}
+      </div>
       </div>
     </section>
   );

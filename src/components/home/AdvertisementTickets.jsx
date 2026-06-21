@@ -68,6 +68,8 @@ export default function AdvertisementTickets() {
   const router = useRouter();
   return (
     <section className="w-full py-10 px-4 md:px-10 bg-background text-foreground">
+      <div className="max-w-7xl mx-auto">
+        
       {/* Title */}
       <div className="flex flex-col items-center mb-8">
         <h2 className="text-2xl md:text-3xl font-bold">
@@ -146,6 +148,7 @@ export default function AdvertisementTickets() {
             </div>
           </Card>
         ))}
+      </div>
       </div>
     </section>
   );
