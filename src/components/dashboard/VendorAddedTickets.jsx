@@ -18,7 +18,7 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 // import { deleteTicketAction } from "@/lib/actions/ticket"; // Server Action
 
-export default function VendorTickets({ totalTickets }) {
+export default function VendorAddedTickets({ totalTickets }) {
   const [tickets, setTickets] = useState(totalTickets);
 
   const handleDelete = async (ticketId) => {

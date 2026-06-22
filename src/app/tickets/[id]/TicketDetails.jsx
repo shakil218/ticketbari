@@ -1,256 +1,273 @@
 "use client";
 
 import Image from "next/image";
-import {
-  Wifi,
-  Snowflake,
-  Droplets,
-  Plug,
-  Armchair,
-  Bus,
-  Minus,
-  Plus,
-  Ticket,
-  Clock3,
-} from "lucide-react";
+import { Bus, Minus, Plus, Ticket, Clock3 } from "lucide-react";
 import { Button } from "@heroui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function TicketDetails() {
+export default function TicketDetails({ ticket }) {
+
   const [quantity, setQuantity] = useState(1);
+  const [timeLeft, setTimeLeft] = useState("");
 
-  const price = 1500;
-  const available = 14;
+  const price = ticket?.price || 0;
+  const available = ticket?.quantity || 0;
+
+  const isDeparturePassed =
+    ticket?.departureTime &&
+    new Date(ticket.departureTime).getTime() <= Date.now();
+
+  const isBookingDisabled = isDeparturePassed || available === 0;
+
+  // =========================
+  // LIVE COUNTDOWN TIMER
+  // =========================
+  useEffect(() => {
+    if (!ticket?.departureTime) return;
+
+    const target = new Date(ticket.departureTime).getTime();
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        setTimeLeft("Departed");
+        clearInterval(interval);
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+
+      const days = Math.floor(totalSeconds / (3600 * 24));
+      const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      const formatted =
+        (days > 0 ? `${days}d ` : "") +
+        `${hours.toString().padStart(2, "0")}h ` +
+        `${minutes.toString().padStart(2, "0")}m ` +
+        `${seconds.toString().padStart(2, "0")}s`;
+
+      setTimeLeft(formatted);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [ticket?.departureTime]);
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-8">
       <div className="grid lg:grid-cols-[1fr_320px] gap-6">
-        {/* LEFT */}
+        {/* LEFT SIDE */}
         <div className="space-y-6">
-          {/* Image */}
-          <div className="relative h-62.5 md:h-100 overflow-hidden rounded-2xl">
+          {/* IMAGE */}
+          <div className="relative h-65 md:h-100 overflow-hidden rounded-2xl">
             <Image
-              src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1400"
-              alt="Bus"
+              src={ticket?.imageUrl}
+              alt={ticket?.title}
               fill
               className="object-cover"
             />
 
+            {/* COUNTDOWN */}
             <div className="absolute top-4 right-4 bg-black/70 text-white rounded-xl px-4 py-3 backdrop-blur">
               <div className="flex items-center gap-2 text-xs uppercase tracking-wide">
                 <Clock3 size={14} />
                 Departure In
               </div>
 
-              <div className="text-2xl font-bold">
-                05h 23m 11s
-              </div>
+              <div className="text-2xl font-bold">{timeLeft}</div>
             </div>
           </div>
 
-          {/* Details Card */}
+          {/* DETAILS */}
           <div className="rounded-2xl border border-default-200 bg-background p-6">
-            {/* Top */}
+            {/* HEADER */}
             <div className="flex justify-between items-start gap-4">
               <div>
                 <span className="inline-flex px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                  Luxury AC Sleeper
+                  {ticket?.transportType}
                 </span>
 
-                <h1 className="text-3xl font-bold mt-3">
-                  Dhaka to Cox&aposs Bazar
-                </h1>
+                <h1 className="text-3xl font-bold mt-3">{ticket?.title}</h1>
+
+                {/* BADGES */}
+                <div className="mt-3 flex gap-2 flex-wrap">
+                  <span className="rounded-full bg-success/10 px-3 py-1 text-xs text-success">
+                    {available} Seats
+                  </span>
+
+                  <span className="rounded-full bg-warning/10 px-3 py-1 text-xs text-warning">
+                    {ticket?.status}
+                  </span>
+                </div>
               </div>
 
+              {/* PRICE */}
               <div className="text-right">
-                <div className="text-success text-5xl font-bold">
-                  ৳1,500
+                <div className="text-success text-4xl font-bold">
+                  ৳{price.toLocaleString()}
                 </div>
-
-                <span className="text-default-500 text-sm">
-                  per seat
-                </span>
+                <span className="text-default-500 text-sm">per seat</span>
               </div>
             </div>
 
-            {/* Divider */}
             <div className="my-6 border-t border-dashed border-default-300" />
 
-            {/* Journey */}
+            {/* JOURNEY */}
             <div className="grid grid-cols-3 items-center">
-              {/* Departure */}
+              {/* FROM */}
               <div>
-                <h3 className="text-3xl font-bold">
-                  10:30 PM
-                </h3>
+                <h3 className="text-xl font-bold">{ticket?.from}</h3>
 
-                <p className="text-default-500 mt-1">
-                  12 Oct 2024
-                </p>
+                <p className="text-default-500 text-sm mt-1">Departure</p>
 
-                <p className="font-semibold mt-2">
-                  Dhaka (Kalyanpur)
+                {/* NEW: Departure Time */}
+                <p className="text-xs text-primary font-medium mt-2">
+                  {ticket?.departureTime
+                    ? new Date(ticket.departureTime).toLocaleTimeString(
+                        "en-BD",
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        },
+                      )
+                    : ""}
                 </p>
               </div>
 
-              {/* Middle */}
+              {/* MIDDLE */}
               <div className="flex flex-col items-center">
                 <Bus className="text-default-400" size={22} />
 
                 <div className="w-full flex items-center mt-3">
                   <div className="w-3 h-3 rounded-full bg-foreground" />
-
                   <div className="flex-1 h-0.5 bg-default-300" />
-
                   <div className="w-3 h-3 rounded-full bg-foreground" />
                 </div>
 
                 <p className="text-default-400 text-sm mt-2">
-                  9h 30m
+                  {ticket?.transportType}
                 </p>
               </div>
 
-              {/* Arrival */}
+              {/* TO */}
               <div className="text-right">
-                <h3 className="text-3xl font-bold">
-                  08:00 AM
-                </h3>
+                <h3 className="text-xl font-bold">{ticket?.to}</h3>
 
-                <p className="text-default-500 mt-1">
-                  13 Oct 2024
-                </p>
+                <p className="text-default-500 text-sm mt-1">Destination</p>
 
-                <p className="font-semibold mt-2">
-                  Cox&aposs Bazar
-                </p>
+                {/* OPTIONAL: arrival time or label */}
+                <p className="text-xs text-default-400 mt-2">Arrival Point</p>
               </div>
             </div>
 
-            {/* Divider */}
             <div className="my-6 border-t border-dashed border-default-300" />
 
-            {/* Perks */}
+            {/* PERKS */}
             <div>
-              <h4 className="text-sm font-bold tracking-widest uppercase text-default-500 mb-4">
+              <h4 className="text-sm font-bold uppercase text-default-500 mb-4">
                 Included Perks
               </h4>
 
               <div className="flex flex-wrap gap-3">
-                {[
-                  {
-                    icon: Wifi,
-                    label: "Free WiFi",
-                  },
-                  {
-                    icon: Snowflake,
-                    label: "AC",
-                  },
-                  {
-                    icon: Droplets,
-                    label: "Water",
-                  },
-                  {
-                    icon: Plug,
-                    label: "Charging Port",
-                  },
-                  {
-                    icon: Armchair,
-                    label: "Reclining Seats",
-                  },
-                ].map((perk) => (
+                {ticket?.perks?.map((perk) => (
                   <div
-                    key={perk.label}
-                    className="flex items-center gap-2 px-4 py-3 rounded-xl border border-default-200 bg-content1"
+                    key={perk}
+                    className="px-4 py-2 rounded-xl border border-default-200 bg-content1 text-sm"
                   >
-                    <perk.icon
-                      size={18}
-                      className="text-success"
-                    />
-
-                    <span className="text-sm">
-                      {perk.label}
-                    </span>
+                    {perk}
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* VENDOR */}
+            <div className="mt-6 text-sm border border-default-200 rounded-xl p-4">
+              <p>
+                <span className="font-semibold">Vendor:</span>{" "}
+                {ticket?.vendorName}
+              </p>
+              <p>
+                <span className="font-semibold">Email:</span>{" "}
+                {ticket?.vendorEmail}
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* RIGHT BOOKING CARD */}
+        {/* RIGHT SIDE */}
         <div>
           <div className="sticky top-24 rounded-2xl border border-default-200 bg-background p-5 shadow-sm">
-            <h2 className="text-2xl font-bold">
-              Book Seats
-            </h2>
+            <h2 className="text-2xl font-bold">Book Seats</h2>
 
-            <p className="text-default-500 mt-1">
-              Select quantity to continue
-            </p>
+            <p className="text-default-500 mt-1">Select quantity</p>
 
-            {/* Quantity */}
+            {/* QUANTITY */}
             <div className="mt-8">
               <div className="flex justify-between mb-2">
-                <span className="font-medium">
-                  Quantity
-                </span>
-
-                <span className="text-default-500">
-                  {available} Available
-                </span>
+                <span className="font-medium">Quantity</span>
+                <span className="text-default-500">{available} Available</span>
               </div>
 
-              <div className="flex items-center justify-between border border-default-300 rounded-xl px-4 py-3">
+              <div className="flex items-center justify-between border rounded-xl px-4 py-3">
                 <button
-                  onClick={() =>
-                    setQuantity(Math.max(1, quantity - 1))
-                  }
+                  disabled={isBookingDisabled}
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Minus size={18} />
                 </button>
 
-                <span className="text-3xl font-bold">
-                  {quantity}
-                </span>
+                <span className="text-2xl font-bold">{quantity}</span>
 
                 <button
-                  onClick={() =>
-                    setQuantity(
-                      Math.min(available, quantity + 1)
-                    )
-                  }
+                  disabled={isBookingDisabled}
+                  onClick={() => setQuantity(Math.min(available, quantity + 1))}
+                  className="disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Plus size={18} />
                 </button>
               </div>
             </div>
 
-            {/* Total */}
+            {/* TOTAL */}
             <div className="mt-8 rounded-xl bg-default-100 p-4">
               <div className="flex justify-between items-center">
-                <span className="text-default-500">
-                  Total Price
-                </span>
+                <span className="text-default-500">Total Price</span>
 
-                <span className="text-4xl font-bold">
+                <span className="text-3xl font-bold">
                   ৳{(price * quantity).toLocaleString()}
                 </span>
               </div>
             </div>
 
-            {/* Button */}
+            {/* BUTTON */}
             <Button
               size="lg"
+              isDisabled={isBookingDisabled}
               startContent={<Ticket size={18} />}
-              className="w-full mt-8 bg-success text-white font-semibold"
+              className="w-full mt-8 rounded-lg bg-linear-to-r from-violet-500 via-purple-500 to-indigo-500 text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Confirm Booking
+              {available === 0
+                ? "Sold Out"
+                : isDeparturePassed
+                  ? "Departure Closed"
+                  : "Book Now"}
             </Button>
 
-            <p className="text-xs text-default-500 text-center mt-5">
-              By booking, you agree to our Terms &
-              Conditions
-            </p>
+            {available === 0 ? (
+              <p className="mt-3 text-center text-sm text-danger">
+                No seats available for this ticket.
+              </p>
+            ):isDeparturePassed && available > 0 ? (
+              <p className="mt-3 text-center text-sm text-warning">
+                Booking is closed because the departure time has passed.
+              </p>
+            ):<p className="text-xs text-default-500 text-center mt-5">
+              By booking you agree to terms
+            </p>}
           </div>
         </div>
       </div>

@@ -1,9 +1,9 @@
-import React from 'react';
+import UserProfile from "@/components/dashboard/user/UserProfile";
 
 const UserPage = () => {
   return (
     <div>
-      this is user dashboard
+      <UserProfile/>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { Card, Button } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MapPin, Bus, Users, Train, Plane, Ship } from "lucide-react";
+import Link from "next/link";
 
 const TicketCard = ({ ticket }) => {
   const router = useRouter();
@@ -88,12 +89,13 @@ const TicketCard = ({ ticket }) => {
         </div>
 
         {/* Button */}
-        <Button
-          className="mt-2 w-full rounded-xl bg-linear-to-r from-violet-500 via-purple-500 to-indigo-500 font-medium text-white transition hover:opacity-90"
-          onClick={() => router.push(`/tickets/${ticket._id}`)}
+        <Link
+        href={`/tickets/${ticket._id}`}
+          className="mt-2 w-full px-3 py-2 text-center rounded-xl bg-linear-to-r from-violet-500 via-purple-500 to-indigo-500 font-medium text-white transition hover:opacity-90 block"
+          
         >
           View Details
-        </Button>
+        </Link>
       </div>
     </Card>
   );

@@ -3,7 +3,7 @@ import LoadingSpinner from "@/app/loading";
 import VendorProfile from "@/components/dashboard/VendorProfile";
 import { authClient } from "@/lib/auth-client";
 
-export default function Page() {
+export default function VendorProfilePage() {
   const {data:session, isPending} = authClient.useSession()
 
   const user = session?.user;

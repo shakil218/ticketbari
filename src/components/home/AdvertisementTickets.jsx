@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
-import { Card, Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
+import TicketCard from "../tickets/TicketCard";
 
 const tickets = [
   {
@@ -10,18 +9,18 @@ const tickets = [
     title: "Dhaka to Cox's Bazar Bus",
     price: 1200,
     quantity: 35,
-    transport: "AC Bus",
+    transportType: "AC Bus",
     perks: ["WiFi", "Snacks", "Charging Port"],
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
   },
   {
     id: "t2",
     title: "Dhaka to Chattogram Train",
     price: 850,
     quantity: 50,
-    transport: "Train",
+    transportType: "Train",
     perks: ["Sleeper Seat", "Food Included"],
-    image:
+    imageUrl:
       "https://plus.unsplash.com/premium_photo-1661953343833-c691a9509d83?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
@@ -29,18 +28,18 @@ const tickets = [
     title: "Dhaka City Air-conditioned Bus",
     price: 150,
     quantity: 80,
-    transport: "City Bus",
+    transportType: "City Bus",
     perks: ["AC", "Fast Route"],
-    image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957",
+    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957",
   },
   {
     id: "t4",
     title: "Dhaka to Sylhet Luxury Bus",
     price: 1300,
     quantity: 20,
-    transport: "Luxury Bus",
+    transportType: "Luxury Bus",
     perks: ["Recliner Seat", "Blanket", "Snacks"],
-    image:
+    imageUrl:
       "https://images.unsplash.com/photo-1669360109634-8386c704a506?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
@@ -48,18 +47,18 @@ const tickets = [
     title: "Launch Ticket Dhaka to Barisal",
     price: 600,
     quantity: 100,
-    transport: "Launch",
+    transportType: "Launch",
     perks: ["Cabin", "Food Service"],
-    image: "https://images.unsplash.com/photo-1529070538774-1843cb3265df",
+    imageUrl: "https://images.unsplash.com/photo-1529070538774-1843cb3265df",
   },
   {
     id: "t6",
     title: "Dhaka Metro Rail Pass",
     price: 100,
     quantity: 200,
-    transport: "Metro Rail",
+    transportType: "Metro Rail",
     perks: ["Fast Travel", "Eco Friendly"],
-    image:
+    imageUrl:
       "https://images.unsplash.com/photo-1704644246328-8ffe8d75885a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
 ];
@@ -84,69 +83,7 @@ export default function AdvertisementTickets() {
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {tickets.map((ticket) => (
-          <Card
-            key={ticket.id}
-            className="overflow-hidden rounded-xl border border-divider shadow-md hover:shadow-xl transition-all bg-background"
-          >
-            {/* Image */}
-            <div className="relative w-full h-40">
-              <Image
-                src={ticket.image}
-                alt={ticket.title}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            {/* Content */}
-            <div className="p-4 space-y-2">
-              {/* Title */}
-              <h3 className="text-lg font-semibold text-foreground">
-                {ticket.title}
-              </h3>
-
-              {/* Transport */}
-              <p className="text-sm text-default-500">
-                Transport:{" "}
-                <span className="font-medium text-foreground">
-                  {ticket.transport}
-                </span>
-              </p>
-
-              {/* Price */}
-              <p className="text-sm text-default-500">
-                Price:{" "}
-                <span className="font-semibold text-success">
-                  ${ticket.price}
-                </span>
-              </p>
-
-              {/* Quantity */}
-              <p className="text-sm text-default-500">
-                Available: {ticket.quantity} tickets
-              </p>
-
-              {/* Perks */}
-              <div className="flex flex-wrap gap-2 mt-2">
-                {ticket.perks.map((perk, i) => (
-                  <span
-                    key={i}
-                    className="text-xs px-2 py-1 rounded-full bg-primary-100 text-primary-600 dark:bg-primary-900 dark:text-primary-200"
-                  >
-                    {perk}
-                  </span>
-                ))}
-              </div>
-
-              {/* Button */}
-              <Button
-                className="w-full mt-3 bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 text-black hover:opacity-90"
-                onPress={() => router.push(`/tickets/${ticket.id}`)}
-              >
-                See Details
-              </Button>
-            </div>
-          </Card>
+          <TicketCard key={ticket.id} ticket={ticket} />
         ))}
       </div>
       </div>

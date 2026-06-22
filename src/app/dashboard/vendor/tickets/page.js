@@ -1,6 +1,6 @@
 import { getUserSession } from "@/lib/core/session";
 import { getVendorTickets } from "@/lib/api/tickets";
-import VendorTickets from "@/components/dashboard/VendorTickets";
+import VendorAddedTickets from "@/components/dashboard/VendorAddedTickets";
 
 const VendorTicketsPage = async () => {
   const user = await getUserSession();
@@ -9,7 +9,7 @@ const VendorTicketsPage = async () => {
 
   return (
     <div>
-      <VendorTickets totalTickets={tickets}/>
+      <VendorAddedTickets totalTickets={tickets}/>
     </div>
   );
 };
