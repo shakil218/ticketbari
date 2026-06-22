@@ -110,7 +110,7 @@ export default function RevenueOverview() {
           </p>
         </div>
 
-        <div className="h-[360px]">
+        <div className="h-90">
           <ResponsiveContainer width="100%" height="100%">
 
             <AreaChart data={revenueData}>
