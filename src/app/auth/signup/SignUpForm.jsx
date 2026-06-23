@@ -16,9 +16,13 @@ import {
 } from "@heroui/react";
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link'
 
 export default function SignUpForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,15 +33,13 @@ export default function SignUpForm() {
     const formData = new FormData(e.currentTarget);
     const userData = Object.fromEntries(formData.entries());
 
-    // =====================================================
-    // TODO:🔐 BETTER AUTH LOGIC WILL GO HERE LATER
-    // =====================================================
+    
+    // BETTER AUTH LOGIC WILL GO HERE LATER
     try {
       setLoading(true);
       const { data, error } = await authClient.signUp.email({
         ...userData,
         role:"user",
-        callbackURL: "/",
       });
       console.log("user:", data);
 
@@ -53,7 +55,7 @@ export default function SignUpForm() {
         autoClose: 3000,
         theme: "colored",
       });
-      // router.push("/");
+      router.push(redirectTo);
     } catch (err) {
       toast.error(
         err.message || "An unexpected error occurred during signup.",
@@ -81,7 +83,7 @@ export default function SignUpForm() {
           autoClose: 3000,
           theme: "colored",
         });
-        router.push("/");
+        router.push(redirectTo);
       }
     } catch (err) {
       toast.error("Google authentication failed. Please try again.");
@@ -180,12 +182,12 @@ export default function SignUpForm() {
           {/* Login */}
           <p className="text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <span
-              onClick={() => router.push("/auth/signin")}
+            <Link
+            href={`/auth/signin?redirect=${redirectTo}`}
               className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent cursor-pointer font-medium hover:underline"
             >
               Sign In here
-            </span>
+            </Link>
           </p>
 
         </Form>

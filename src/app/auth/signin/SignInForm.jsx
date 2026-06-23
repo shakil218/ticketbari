@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from 'next/link'
 import { Eye, EyeOff } from "lucide-react";
 import { Icon } from "@iconify/react";
 
@@ -16,9 +17,12 @@ import {
 } from "@heroui/react";
 import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
+import { useSearchParams } from 'next/navigation'
 
 export default function SignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,14 +33,11 @@ export default function SignInForm() {
     const formData = new FormData(e.currentTarget);
     const userInfo = Object.fromEntries(formData.entries());
 
-    // =====================================================
-    // TODO:🔐 BETTER AUTH LOGIC WILL GO HERE LATER
-    // =====================================================
+    // BETTER AUTH LOGIC WILL GO HERE LATER
     try {
       setLoading(true);
       const { data, error } = await authClient.signIn.email({
         ...userInfo,
-        callbackURL: "/",
         rememberMe: false,
       });
 
@@ -51,7 +52,7 @@ export default function SignInForm() {
         autoClose: 3000,
         theme: "colored",
       });
-      router.push("/");
+      router.push(redirectTo);
     } catch (error) {
       toast.error(error.message || "An unexpected error occurred.", {
         position: "top-center",
@@ -76,7 +77,7 @@ export default function SignInForm() {
           autoClose: 3000,
           theme: "colored",
         });
-        router.push("/");
+        router.push(redirectTo);
       }
     } catch (err) {
       toast.error("Google authentication failed. Please try again.");
@@ -173,12 +174,12 @@ export default function SignInForm() {
           {/* Sign Up */}
           <p className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
-            <span
-              onClick={() => router.push("/auth/signup")}
+            <Link
+            href={`/auth/signup?redirect=${redirectTo}`}
               className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent cursor-pointer font-medium hover:underline"
             >
               Sign Up here
-            </span>
+            </Link>
           </p>
         </Form>
       </div>

@@ -4,11 +4,16 @@ import Image from "next/image";
 import { Bus, Minus, Plus, Ticket, Clock3 } from "lucide-react";
 import { Button } from "@heroui/react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { submitTicketBooking } from "@/lib/actions/bookings";
 
-export default function TicketDetails({ ticket }) {
-
+export default function TicketDetails({ passenger, ticket }) {
   const [quantity, setQuantity] = useState(1);
   const [timeLeft, setTimeLeft] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const price = ticket?.price || 0;
   const available = ticket?.quantity || 0;
@@ -55,6 +60,37 @@ export default function TicketDetails({ ticket }) {
 
     return () => clearInterval(interval);
   }, [ticket?.departureTime]);
+
+  const handleBooking = async () => {
+    const bookingTicketInfo = {
+      ticketId : ticket?._id,
+      ticketTitle: ticket?.title,
+      imageUrl: ticket?.imageUrl,
+      departureFrom: ticket?.from,
+      arrivalPoint: ticket?.to,
+      departureDate: ticket?.departureTime,
+      bookingQuantity: quantity,
+      totalPrice: price * quantity,
+      passengerName: passenger?.name,
+      passengerEmail: passenger?.email,
+      status: "pending",
+    }
+    try {
+      setLoading(true);
+      const res = await submitTicketBooking(bookingTicketInfo);
+
+      if (res?.insertedId) {
+        toast.success("Ticket booked successfully!");
+        router.push("/dashboard/user/my-bookings");
+      } else {
+      toast.error("Failed to book the ticket.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-8">
@@ -246,10 +282,12 @@ export default function TicketDetails({ ticket }) {
             {/* BUTTON */}
             <Button
               size="lg"
-              isDisabled={isBookingDisabled}
-              startContent={<Ticket size={18} />}
-              className="w-full mt-8 rounded-lg bg-linear-to-r from-violet-500 via-purple-500 to-indigo-500 text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+              isDisabled={isBookingDisabled || loading}
+              isLoading={loading}
+              onClick={handleBooking}
+              className="w-full mt-8 rounded-lg bg-linear-to-r from-violet-500 via-purple-500 to-indigo-500 text-white font-semibold disabled:opacity-40"
             >
+              <Ticket size={18} />
               {available === 0
                 ? "Sold Out"
                 : isDeparturePassed
@@ -261,13 +299,15 @@ export default function TicketDetails({ ticket }) {
               <p className="mt-3 text-center text-sm text-danger">
                 No seats available for this ticket.
               </p>
-            ):isDeparturePassed && available > 0 ? (
+            ) : isDeparturePassed && available > 0 ? (
               <p className="mt-3 text-center text-sm text-warning">
                 Booking is closed because the departure time has passed.
               </p>
-            ):<p className="text-xs text-default-500 text-center mt-5">
-              By booking you agree to terms
-            </p>}
+            ) : (
+              <p className="text-xs text-default-500 text-center mt-5">
+                By booking you agree to terms
+              </p>
+            )}
           </div>
         </div>
       </div>
