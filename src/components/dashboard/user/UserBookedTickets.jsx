@@ -14,26 +14,26 @@ export default function UserBookedTickets({ bookings = [] }) {
 
             {/* Image */}
             <img
-              src={ticket.image}
+              src={ticket.imageUrl}
               className="w-full h-40 object-cover rounded-lg"
               alt="ticket"
             />
 
             {/* Title */}
             <h3 className="text-lg font-semibold mt-3">
-              {ticket.title}
+              {ticket.ticketTitle}
             </h3>
 
             {/* Route */}
             <p className="text-sm text-gray-500">
-              {ticket.from} → {ticket.to}
+              {ticket.departureFrom} → {ticket.arrivalPoint}
             </p>
 
             {/* Quantity + Price */}
             <div className="flex justify-between mt-2 text-sm">
-              <span>Qty: {ticket.quantity}</span>
+              <span>Qty: {ticket.bookingQuantity}</span>
               <span className="font-semibold">
-                ${ticket.price * ticket.quantity}
+                ${ticket.totalPrice}
               </span>
             </div>
 
@@ -45,13 +45,14 @@ export default function UserBookedTickets({ bookings = [] }) {
             {/* Status */}
             <Chip
               className="mt-3"
+              variant="soft"
               color={
-                ticket.status === "paid"
-                  ? "success"
+                ticket.status === "pending"
+                  ? "accent"
                   : ticket.status === "rejected"
                   ? "danger"
                   : ticket.status === "accepted"
-                  ? "primary"
+                  ? "success"
                   : "warning"
               }
             >
@@ -68,8 +69,7 @@ export default function UserBookedTickets({ bookings = [] }) {
             {/* Pay Button */}
             {ticket.status === "accepted" && (
               <Button
-                className="w-full mt-4"
-                color="primary"
+                className="w-full mt-4 bg-linear-to-r from-violet-500 via-purple-500 to-indigo-500 text-white"
               >
                 Pay Now
               </Button>
