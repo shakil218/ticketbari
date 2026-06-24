@@ -1,16 +1,55 @@
-// components/dashboard/MyBookedTickets.jsx
 "use client";
 
+import { useEffect, useState } from "react";
 import { Card, Button, Chip } from "@heroui/react";
 
 export default function UserBookedTickets({ bookings = [] }) {
+  const [timeLeftMap, setTimeLeftMap] = useState({});
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updated = {};
+
+      bookings.forEach((ticket) => {
+        const difference =
+          new Date(ticket.departureDate).getTime() - Date.now();
+
+        if (difference <= 0) {
+          updated[ticket._id] = "Expired";
+          return;
+        }
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) /
+            (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (difference % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor(
+          (difference % (1000 * 60)) / 1000
+        );
+
+        updated[ticket._id] =
+          `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      });
+
+      setTimeLeftMap(updated);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [bookings]);
+
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">My Booked Tickets</h2>
+      <h2 className="text-2xl font-bold mb-6">
+        My Booked Tickets
+      </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {bookings.map((ticket) => (
-          <Card key={ticket.id} className="p-4 shadow-sm">
+          <Card key={ticket._id} className="p-4 shadow-sm">
 
             {/* Image */}
             <img
@@ -29,17 +68,18 @@ export default function UserBookedTickets({ bookings = [] }) {
               {ticket.departureFrom} → {ticket.arrivalPoint}
             </p>
 
-            {/* Quantity + Price */}
+            {/* Qty + Price */}
             <div className="flex justify-between mt-2 text-sm">
               <span>Qty: {ticket.bookingQuantity}</span>
               <span className="font-semibold">
-                ${ticket.totalPrice}
+                ৳{ticket.totalPrice}
               </span>
             </div>
 
             {/* Date */}
             <p className="text-xs text-gray-500 mt-1">
-              Departure: {ticket.departureDate}
+              Departure:{" "}
+              {new Date(ticket.departureDate).toLocaleString()}
             </p>
 
             {/* Status */}
@@ -48,29 +88,27 @@ export default function UserBookedTickets({ bookings = [] }) {
               variant="soft"
               color={
                 ticket.status === "pending"
-                  ? "accent"
+                  ? "warning"
                   : ticket.status === "rejected"
                   ? "danger"
                   : ticket.status === "accepted"
                   ? "success"
-                  : "warning"
+                  : "default"
               }
             >
               {ticket.status}
             </Chip>
 
-            {/* Countdown UI placeholder */}
+            {/* Countdown */}
             {ticket.status !== "rejected" && (
               <div className="mt-3 text-xs text-gray-500">
-                ⏳ Countdown: 02h 14m 32s
+                ⏳ Countdown: {timeLeftMap[ticket._id] || "Loading..."}
               </div>
             )}
 
             {/* Pay Button */}
             {ticket.status === "accepted" && (
-              <Button
-                className="w-full mt-4 bg-linear-to-r from-violet-500 via-purple-500 to-indigo-500 text-white"
-              >
+              <Button className="w-full mt-4 bg-linear-to-r from-violet-500 via-purple-500 to-indigo-500 text-white">
                 Pay Now
               </Button>
             )}

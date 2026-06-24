@@ -9,9 +9,9 @@ export const serverFetch = async (path) => {
 
 
 // server mutation
-export const serverMutation = async (path,data) => {
+export const serverMutation = async (path,data,method='POST') => {
   const res = await fetch(`${baseURL}${path}`, {
-    method: "POST",
+    method: method,
     headers: {
       "Content-Type": "application/json",
     },

@@ -1,36 +1,45 @@
 "use client";
 
+import { useState } from "react";
 import { Table, Button, Chip } from "@heroui/react";
+import { toast } from "react-toastify";
+import { updateBookingTicketsStatus } from "@/lib/actions/bookings";
 
-/* FAKE DATA */
-const requestedBookings = [
-  {
-    id: "REQ-001",
-    userName: "Rahim Uddin",
-    email: "rahim@gmail.com",
-    ticketTitle: "Dhaka → Cox’s Bazar Luxury Bus",
-    quantity: 2,
-    unitPrice: 1200,
-  },
-  {
-    id: "REQ-002",
-    userName: "Karim Hasan",
-    email: "karim@gmail.com",
-    ticketTitle: "Rajshahi → Dhaka AC Bus",
-    quantity: 1,
-    unitPrice: 900,
-  },
-  {
-    id: "REQ-003",
-    userName: "Nusrat Jahan",
-    email: "nusrat@gmail.com",
-    ticketTitle: "Sylhet → Chittagong Night Coach",
-    quantity: 3,
-    unitPrice: 1100,
-  },
-];
+export default function RequestedTicketsBookings({
+  requestedBookings,
+}) {
+  const [bookings, setBookings] = useState(requestedBookings);
+  const [loadingId, setLoadingId] = useState("");
 
-export default function RequestedTicketsBookings() {
+  const handleStatusUpdate = async (id, status) => {
+    try {
+      setLoadingId(id);
+
+      const result = await updateBookingTicketsStatus(id, {
+        status,
+      });
+
+      if (result?.modifiedCount > 0) {
+        setBookings((prev) =>
+          prev.map((booking) =>
+            booking._id === id
+              ? { ...booking, status }
+              : booking
+          )
+        );
+
+        toast.success(
+          `Booking ${status} successfully`
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update booking status");
+    } finally {
+      setLoadingId("");
+    }
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6">
@@ -40,9 +49,7 @@ export default function RequestedTicketsBookings() {
       <Table aria-label="requested bookings">
         <Table.ScrollContainer>
           <Table.Content>
-            
             <Table.Header>
-              <Table.Column>User</Table.Column>
               <Table.Column>Ticket</Table.Column>
               <Table.Column>Qty</Table.Column>
               <Table.Column>Total</Table.Column>
@@ -51,58 +58,83 @@ export default function RequestedTicketsBookings() {
             </Table.Header>
 
             <Table.Body>
-              {requestedBookings.map((req) => (
-                <Table.Row key={req.id} id={req.id}>
-
-                  {/* USER */}
-                  <Table.Cell>
-                    <div>
-                      <p className="font-medium">
-                        {req.userName}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {req.email}
-                      </p>
-                    </div>
-                  </Table.Cell>
-
+              {bookings.map((req) => (
+                <Table.Row key={req._id} id={req._id}>
                   {/* TICKET */}
-                  <Table.Cell>
+                  <Table.Cell className="font-semibold">
                     {req.ticketTitle}
                   </Table.Cell>
 
                   {/* QTY */}
-                  <Table.Cell>{req.quantity}</Table.Cell>
+                  <Table.Cell>
+                    {req.bookingQuantity}
+                  </Table.Cell>
 
                   {/* TOTAL */}
                   <Table.Cell className="font-semibold">
-                    ৳{req.quantity * req.unitPrice}
+                    ৳{req.totalPrice}
                   </Table.Cell>
 
                   {/* STATUS */}
                   <Table.Cell>
-                    <Chip color="warning">
-                      pending
+                    <Chip
+                      className="mt-3"
+                      variant="soft"
+                      color={
+                        req.status === "pending"
+                          ? "warning"
+                          : req.status === "rejected"
+                            ? "danger"
+                            : req.status === "accepted"
+                              ? "success"
+                              : "default"
+                      }
+                    >
+                      {req.status}
                     </Chip>
                   </Table.Cell>
 
                   {/* ACTION */}
                   <Table.Cell>
-                    <div className="flex gap-2">
-                      <Button size="sm" color="success">
-                        Accept
-                      </Button>
+                    {req.status === "pending" ? (
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          color="success"
+                          isLoading={loadingId === req._id}
+                          onPress={() =>
+                            handleStatusUpdate(
+                              req._id,
+                              "accepted"
+                            )
+                          }
+                        >
+                          Accept
+                        </Button>
 
-                      <Button size="sm" color="danger">
-                        Reject
-                      </Button>
-                    </div>
+                        <Button
+                          size="sm"
+                          color="danger"
+                          isLoading={loadingId === req._id}
+                          onPress={() =>
+                            handleStatusUpdate(
+                              req._id,
+                              "rejected"
+                            )
+                          }
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    ) : (
+                      <span className="text-default-500 text-sm">
+                        Completed
+                      </span>
+                    )}
                   </Table.Cell>
-
                 </Table.Row>
               ))}
             </Table.Body>
-
           </Table.Content>
         </Table.ScrollContainer>
       </Table>

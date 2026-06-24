@@ -5,7 +5,7 @@ import { getUserSession } from '@/lib/core/session';
 const UserBookedTicketsPage = async () => {
   const user = await getUserSession();
   const bookings = await getBookingsByPassenger(user?.id);
- console.log("bookings",bookings)
+ 
   return (
     <div>
       <UserBookedTickets bookings={bookings} />
