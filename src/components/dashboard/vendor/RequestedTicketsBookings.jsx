@@ -100,7 +100,7 @@ export default function RequestedTicketsBookings({
                       <div className="flex gap-2">
                         <Button
                           size="sm"
-                          color="success"
+                          variant="primary"
                           isLoading={loadingId === req._id}
                           onPress={() =>
                             handleStatusUpdate(
@@ -114,7 +114,7 @@ export default function RequestedTicketsBookings({
 
                         <Button
                           size="sm"
-                          color="danger"
+                          variant="danger"
                           isLoading={loadingId === req._id}
                           onPress={() =>
                             handleStatusUpdate(

@@ -8,7 +8,7 @@ const UserBookedTicketsPage = async () => {
  
   return (
     <div>
-      <UserBookedTickets bookings={bookings} />
+      <UserBookedTickets passenger={user} bookings={bookings} />
     </div>
   );
 };
