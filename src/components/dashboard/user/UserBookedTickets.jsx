@@ -114,6 +114,16 @@ export default function UserBookedTickets({ passenger, bookings = [] }) {
                   {/* Pass the dynamic ticket data into hidden inputs */}
                   <input
                     type="hidden"
+                    name="ticketId"
+                    value={ticket?.ticketId}
+                  />
+                  <input
+                    type="hidden"
+                    name="bookingId"
+                    value={ticket?._id}
+                  />
+                  <input
+                    type="hidden"
                     name="ticketTitle"
                     value={ticket?.ticketTitle}
                   />

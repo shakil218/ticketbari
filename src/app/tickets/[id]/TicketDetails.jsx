@@ -60,7 +60,7 @@ export default function TicketDetails({ passenger, ticket }) {
 
     return () => clearInterval(interval);
   }, [ticket?.departureTime]);
-console.log(passenger);
+
   const handleBooking = async () => {
     const bookingTicketInfo = {
       ticketId : ticket?._id,
