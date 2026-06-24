@@ -95,7 +95,9 @@ export default function UserBookedTickets({ passenger, bookings = [] }) {
                       ? "danger"
                       : ticket.status === "accepted"
                         ? "success"
-                        : "default"
+                        : ticket.status === "paid"
+                          ? "accent"
+                          : "default"
                 }
               >
                 {ticket.status}

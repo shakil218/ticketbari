@@ -1,10 +1,14 @@
 import UserTransactionHistory from '@/components/dashboard/user/UserTransactionHistory';
-import React from 'react';
+import { getUserSession } from '@/lib/core/session';
+import { getPaymentsByCustomerEmail } from '@/lib/api/payments';
 
-const UserTransactionHistoryPage = () => {
+const UserTransactionHistoryPage = async() => {
+  const user = await getUserSession();
+  const payments = await getPaymentsByCustomerEmail(user?.email);
+  console.log(payments)
   return (
     <div>
-      <UserTransactionHistory />
+      <UserTransactionHistory payments={payments} />
     </div>
   );
 };

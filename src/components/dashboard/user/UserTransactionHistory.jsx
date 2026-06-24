@@ -1,27 +1,8 @@
 "use client";
 
-import {
-  Table,
-  Chip,
-} from "@heroui/react";
+import { Table, Chip } from "@heroui/react";
 
-export default function UserTransactionHistory() {
-  const transactions = [
-  {
-    id: "TX-9001",
-    transactionId: "pi_123456ABC",
-    title: "Dhaka → Cox’s Bazar Luxury Bus",
-    amount: 2400,
-    date: "2026-06-18",
-  },
-  {
-    id: "TX-9002",
-    transactionId: "pi_78910XYZ",
-    title: "Rajshahi → Dhaka AC Bus",
-    amount: 900,
-    date: "2026-06-19",
-  },
-];
+export default function UserTransactionHistory({ payments = [] }) {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6">
@@ -31,50 +12,79 @@ export default function UserTransactionHistory() {
       <Table aria-label="transaction history table">
         <Table.ScrollContainer>
           <Table.Content>
-
             <Table.Header>
               <Table.Column>ID</Table.Column>
-              <Table.Column>Transaction Id</Table.Column>
+              <Table.Column>Transaction ID</Table.Column>
               <Table.Column>Ticket</Table.Column>
+              <Table.Column>Quantity</Table.Column>
               <Table.Column>Amount</Table.Column>
               <Table.Column>Date</Table.Column>
             </Table.Header>
 
             <Table.Body>
-              {transactions.map((tx) => (
-                <Table.Row key={tx.id} id={tx.id}>
-
+              {payments.map((tx, index) => (
+                <Table.Row key={tx._id} id={tx._id}>
+                  {/* Serial Number */}
                   <Table.Cell>
                     <span className="font-medium">
-                      {tx.id}
+                      {index + 1}
                     </span>
                   </Table.Cell>
 
-                  <Table.Cell className="text-xs text-gray-500">
-                    {tx.transactionId}
+                  {/* Transaction ID */}
+                  <Table.Cell className="text-xs">
+                    <span className="break-all">
+                      {tx.transactionId}
+                    </span>
                   </Table.Cell>
 
+                  {/* Ticket Title */}
                   <Table.Cell>
-                    {tx.title}
+                    {tx.ticketTitle}
                   </Table.Cell>
 
+                  {/* Quantity */}
+                  <Table.Cell>
+                    <Chip
+                      size="sm"
+                      color="secondary"
+                      variant="flat"
+                    >
+                      {tx.bookingQuantity}
+                    </Chip>
+                  </Table.Cell>
+
+                  {/* Amount */}
                   <Table.Cell className="font-semibold">
                     ৳{tx.amount}
                   </Table.Cell>
 
+                  {/* Payment Date */}
                   <Table.Cell>
                     <Chip size="sm" variant="flat">
-                      {tx.date}
+                      {new Date(
+                        tx.paymentDate
+                      ).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
                     </Chip>
                   </Table.Cell>
-
                 </Table.Row>
               ))}
             </Table.Body>
-
           </Table.Content>
         </Table.ScrollContainer>
       </Table>
+
+      {payments.length === 0 && (
+        <div className="text-center py-10">
+          <p className="text-default-500">
+            No transaction history found.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
