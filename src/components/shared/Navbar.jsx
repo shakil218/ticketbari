@@ -25,8 +25,14 @@ export default function Navbar() {
     { label: "Contact", href: "/contact" },
   ];
 
+  const dashboardLinks = {
+    user: "/dashboard/user/profile",
+    vendor: "/dashboard/vendor/profile",
+    admin: "/dashboard/admin/profile"
+  }
+
   if (user?.email) {
-    navLinks[3] = { label: "Dashboard", href: "/dashboard/vendor" };
+    navLinks[3] = { label: "Dashboard", href: dashboardLinks[user?.role || "user"] };
     navLinks[4] = { label: "Contact", href: "/contact" };
   }
 

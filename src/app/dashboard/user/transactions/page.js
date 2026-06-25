@@ -5,7 +5,6 @@ import { getPaymentsByCustomerEmail } from '@/lib/api/payments';
 const UserTransactionHistoryPage = async() => {
   const user = await getUserSession();
   const payments = await getPaymentsByCustomerEmail(user?.email);
-  console.log(payments)
   return (
     <div>
       <UserTransactionHistory payments={payments} />
