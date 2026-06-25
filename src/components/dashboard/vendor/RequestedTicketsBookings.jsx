@@ -5,9 +5,7 @@ import { Table, Button, Chip } from "@heroui/react";
 import { toast } from "react-toastify";
 import { updateBookingTicketsStatus } from "@/lib/actions/bookings";
 
-export default function RequestedTicketsBookings({
-  requestedBookings,
-}) {
+export default function RequestedTicketsBookings({ requestedBookings }) {
   const [bookings, setBookings] = useState(requestedBookings);
   const [loadingId, setLoadingId] = useState("");
 
@@ -22,15 +20,11 @@ export default function RequestedTicketsBookings({
       if (result?.modifiedCount > 0) {
         setBookings((prev) =>
           prev.map((booking) =>
-            booking._id === id
-              ? { ...booking, status }
-              : booking
-          )
+            booking._id === id ? { ...booking, status } : booking,
+          ),
         );
 
-        toast.success(
-          `Booking ${status} successfully`
-        );
+        toast.success(`Booking ${status} successfully`);
       }
     } catch (error) {
       console.error(error);
@@ -42,9 +36,7 @@ export default function RequestedTicketsBookings({
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">
-        Requested Bookings
-      </h2>
+      <h2 className="text-2xl font-bold mb-6">Requested Bookings</h2>
 
       <Table aria-label="requested bookings">
         <Table.ScrollContainer>
@@ -66,9 +58,7 @@ export default function RequestedTicketsBookings({
                   </Table.Cell>
 
                   {/* QTY */}
-                  <Table.Cell>
-                    {req.bookingQuantity}
-                  </Table.Cell>
+                  <Table.Cell>{req.bookingQuantity}</Table.Cell>
 
                   {/* TOTAL */}
                   <Table.Cell className="font-semibold">
@@ -87,7 +77,9 @@ export default function RequestedTicketsBookings({
                             ? "danger"
                             : req.status === "accepted"
                               ? "success"
-                              : "default"
+                              : req.status === "paid"
+                                ? "accent"
+                                : "default"
                       }
                     >
                       {req.status}
@@ -103,10 +95,7 @@ export default function RequestedTicketsBookings({
                           variant="primary"
                           isLoading={loadingId === req._id}
                           onPress={() =>
-                            handleStatusUpdate(
-                              req._id,
-                              "accepted"
-                            )
+                            handleStatusUpdate(req._id, "accepted")
                           }
                         >
                           Accept
@@ -117,10 +106,7 @@ export default function RequestedTicketsBookings({
                           variant="danger"
                           isLoading={loadingId === req._id}
                           onPress={() =>
-                            handleStatusUpdate(
-                              req._id,
-                              "rejected"
-                            )
+                            handleStatusUpdate(req._id, "rejected")
                           }
                         >
                           Reject

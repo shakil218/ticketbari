@@ -77,7 +77,7 @@ export default function UserProfile({ user }) {
 
             <label
               htmlFor="profile-image"
-              className="absolute bottom-1 right-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-lg hover:scale-105 transition"
+              className="absolute bottom-1 right-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-background text-foreground shadow-lg hover:scale-105 transition"
             >
               <Camera size={18} />
             </label>

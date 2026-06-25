@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, Button, Chip } from "@heroui/react";
+import Image from "next/image";
 
 
 export default function UserBookedTickets({ passenger, bookings = [] }) {
@@ -57,11 +58,14 @@ export default function UserBookedTickets({ passenger, bookings = [] }) {
           return (
             <Card key={ticket._id} className="p-4 shadow-sm">
               {/* Image */}
-              <img
-                src={ticket.imageUrl}
-                className="w-full h-40 object-cover rounded-lg"
-                alt="ticket"
-              />
+              <div className="relative w-full h-40">
+                <Image
+                  src={ticket.imageUrl}
+                  alt={ticket.ticketTitle || "Ticket"}
+                  fill
+                  className="object-cover rounded-lg"
+                />
+              </div>
 
               {/* Title */}
               <h3 className="text-lg font-semibold mt-3">
