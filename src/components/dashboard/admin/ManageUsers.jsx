@@ -1,85 +1,172 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Table, Button, Chip } from "@heroui/react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { updateUserRole, updateFraudStatus } from "@/lib/actions/users";
 
-// fake data
-const users = [
-  {
-    id: "U-1",
-    name: "Rahim Uddin",
-    email: "rahim@gmail.com",
-    role: "vendor",
-    fraud: false,
-  },
-  {
-    id: "U-2",
-    name: "Karim Hasan",
-    email: "karim@gmail.com",
-    role: "user",
-    fraud: false,
-  },
-];
+export default function ManageUsers({ users = [] }) {
+  const router = useRouter();
 
-export default function ManageUsers() {
+  const handleMakeVendor = async (
+  email
+) => {
+  const result =
+    await updateUserRole(
+      email,
+      "vendor"
+    );
+
+    console.log(result);
+
+  if (result?.modifiedCount > 0) {
+    toast.success(
+      "User promoted to Vendor"
+    );
+    router.refresh();
+  }
+};
+
+const handleMakeAdmin = async (
+  email
+) => {
+  const result =
+    await updateUserRole(
+      email,
+      "admin"
+    );
+
+  if (result?.modifiedCount > 0) {
+    toast.success(
+      "User promoted to Admin"
+    );
+    router.refresh();
+  }
+};
+
+const handleFraudToggle = async (
+  email,
+  currentStatus
+) => {
+  const result =
+    await updateFraudStatus(
+      email,
+      !currentStatus
+    );
+
+  if (result?.modifiedCount > 0) {
+    toast.success(
+      currentStatus
+        ? "Fraud removed"
+        : "Vendor marked as fraud"
+    );
+
+    router.refresh();
+  }
+};
+
   return (
     <div>
+      <h2 className="text-2xl font-bold mb-6">Manage Users</h2>
 
-      <h2 className="text-2xl font-bold mb-6">
-        Manage Users
-      </h2>
+      <Table aria-label="manage users table">
+        <Table.ScrollContainer>
+          <Table.Content>
+            <Table.Header>
+              <Table.Column isRowHeader>Name</Table.Column>
 
-      <div className="overflow-x-auto border rounded-xl">
+              <Table.Column>Email</Table.Column>
 
-        <table className="w-full text-sm">
+              <Table.Column>Role</Table.Column>
 
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="p-3">Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+              <Table.Column>Status</Table.Column>
 
-          <tbody>
-            {users.map((u) => (
-              <tr key={u.id} className="border-t">
+              <Table.Column>Actions</Table.Column>
+            </Table.Header>
 
-                <td className="p-3">{u.name}</td>
-                <td>{u.email}</td>
+            <Table.Body>
+              {users.map((user) => (
+                <Table.Row key={user._id} id={user._id}>
+                  <Table.Cell>
+                    <p className="font-semibold">{user.name}</p>
+                  </Table.Cell>
 
-                <td>
-                  <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">
-                    {u.role}
-                  </span>
-                </td>
+                  <Table.Cell>{user.email}</Table.Cell>
 
-                <td className="flex gap-2 p-2">
+                  <Table.Cell>
+                    <Chip
+                      variant="soft"
+                      color={
+                        user.role === "admin"
+                          ? "danger"
+                          : user.role === "vendor"
+                            ? "accent"
+                            : "success"
+                      }
+                      className="capitalize"
+                    >
+                      {user.role || "user"}
+                    </Chip>
+                  </Table.Cell>
 
-                  <Button size="sm">
-                    Make Admin
-                  </Button>
+                  <Table.Cell>
+                    {user.role === "vendor" ? (
+                      <Chip
+                        variant="soft"
+                        color={user.isFraud ? "danger" : "success"}
+                      >
+                        {user.isFraud ? "Fraud" : "Verified"}
+                      </Chip>
+                    ) : (
+                      "-"
+                    )}
+                  </Table.Cell>
 
-                  <Button size="sm" color="secondary">
-                    Make Vendor
-                  </Button>
+                  <Table.Cell>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        isDisabled={user.role === "vendor"}
+                        onPress={() => handleMakeVendor(user.email)}
+                      >
+                        Make Vendor
+                      </Button>
 
-                  {u.role === "vendor" && (
-                    <Button size="sm" color="danger">
-                      Mark Fraud
-                    </Button>
-                  )}
+                      <Button
+                        size="sm"
+                        variant="danger"
+                        isDisabled={user.role === "admin"}
+                        onPress={() => handleMakeAdmin(user.email)}
+                      >
+                        Make Admin
+                      </Button>
 
-                </td>
+                      {user.role === "vendor" && (
+                        <Button
+                          size="sm"
+                          className="bg-warning text-black"
+                          onPress={() =>
+                            handleFraudToggle(user.email, user.isFraud)
+                          }
+                        >
+                          {user.isFraud ? "Remove Fraud" : "Mark Fraud"}
+                        </Button>
+                      )}
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+      </Table>
 
-              </tr>
-            ))}
-          </tbody>
-
-        </table>
-
-      </div>
-
+      {users.length === 0 && (
+        <div className="text-center py-10 text-default-500">
+          No users found.
+        </div>
+      )}
     </div>
   );
 }

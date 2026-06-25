@@ -1,9 +1,11 @@
 import ManageUsers from "@/components/dashboard/admin/ManageUsers"
+import {getAllUsers} from "@/lib/api/users.js"
 
-const ManageUsersPage = () => {
+const ManageUsersPage = async() => {
+  const users = await getAllUsers();
   return (
     <div>
-      <ManageUsers />
+      <ManageUsers users={users} />
     </div>
   );
 };

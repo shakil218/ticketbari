@@ -5,11 +5,13 @@ import { useState } from "react";
 import { Card, Chip } from "@heroui/react";
 import { Camera } from "lucide-react";
 import { toast } from "react-toastify";
-
+import { useRouter } from "next/navigation";
 import { updateUserProfileImage } from "@/lib/actions/users";
 
 export default function UserProfile({ user }) {
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleImageUpdate = async (e) => {
     try {
@@ -44,6 +46,7 @@ export default function UserProfile({ user }) {
       );
 
       if (result?.modifiedCount > 0) {
+        router.refresh();
         toast.success("Profile photo updated successfully");
       }
     } catch (error) {
