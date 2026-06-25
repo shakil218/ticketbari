@@ -11,3 +11,7 @@ export const getTicketById = async (jobId) => {
 export const getVendorTickets = async (vendorEmail) => {
   return serverFetch(`/api/tickets?email=${vendorEmail}`);
 };
+
+export const getApprovedTickets = async () => {
+  return serverFetch("/api/tickets/approved");
+};

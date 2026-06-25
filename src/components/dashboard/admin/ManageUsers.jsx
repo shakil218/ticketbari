@@ -8,62 +8,33 @@ import { updateUserRole, updateFraudStatus } from "@/lib/actions/users";
 export default function ManageUsers({ users = [] }) {
   const router = useRouter();
 
-  const handleMakeVendor = async (
-  email
-) => {
-  const result =
-    await updateUserRole(
-      email,
-      "vendor"
-    );
+  const handleMakeVendor = async (email) => {
+    const result = await updateUserRole(email, "vendor");
 
-    console.log(result);
+    if (result?.modifiedCount > 0) {
+      toast.success("User promoted to Vendor");
+      router.refresh();
+    }
+  };
 
-  if (result?.modifiedCount > 0) {
-    toast.success(
-      "User promoted to Vendor"
-    );
-    router.refresh();
-  }
-};
+  const handleMakeAdmin = async (email) => {
+    const result = await updateUserRole(email, "admin");
 
-const handleMakeAdmin = async (
-  email
-) => {
-  const result =
-    await updateUserRole(
-      email,
-      "admin"
-    );
+    if (result?.modifiedCount > 0) {
+      toast.success("User promoted to Admin");
+      router.refresh();
+    }
+  };
 
-  if (result?.modifiedCount > 0) {
-    toast.success(
-      "User promoted to Admin"
-    );
-    router.refresh();
-  }
-};
+  const handleFraudToggle = async (email, currentStatus) => {
+    const result = await updateFraudStatus(email, !currentStatus);
 
-const handleFraudToggle = async (
-  email,
-  currentStatus
-) => {
-  const result =
-    await updateFraudStatus(
-      email,
-      !currentStatus
-    );
+    if (result?.modifiedCount > 0) {
+      toast.success(currentStatus ? "Fraud removed" : "Vendor marked as fraud");
 
-  if (result?.modifiedCount > 0) {
-    toast.success(
-      currentStatus
-        ? "Fraud removed"
-        : "Vendor marked as fraud"
-    );
-
-    router.refresh();
-  }
-};
+      router.refresh();
+    }
+  };
 
   return (
     <div>

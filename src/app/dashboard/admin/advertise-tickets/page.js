@@ -1,10 +1,11 @@
-import AdvertiseTickets from "@/components/dashboard/admin/AdvertiseTickets"
+import AdvertiseTickets from "@/components/dashboard/admin/AdvertiseTickets";
+import { getApprovedTickets } from "@/lib/api/tickets";
 
-const AdvertiseTicketsPage = () => {
+const AdvertiseTicketsPage = async () => {
+  const tickets = await getApprovedTickets();
+
   return (
-    <div>
-      <AdvertiseTickets />
-    </div>
+    <AdvertiseTickets tickets={tickets} />
   );
 };
 
