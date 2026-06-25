@@ -1,6 +1,6 @@
 "use client"
 import LoadingSpinner from "@/app/loading";
-import VendorProfile from "@/components/dashboard/VendorProfile";
+import VendorProfile from "@/components/dashboard/vendor/VendorProfile";
 import { authClient } from "@/lib/auth-client";
 
 export default function VendorProfilePage() {

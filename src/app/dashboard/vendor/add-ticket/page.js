@@ -1,4 +1,4 @@
-import AddTicketForm from "@/components/dashboard/AddTicketForm";
+import AddTicketForm from "@/components/dashboard/vendor/AddTicketForm";
 
 export default function AddTicketPage() {
   return (

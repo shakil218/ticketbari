@@ -123,7 +123,7 @@ export default function AddTicketForm() {
         formElement.reset();
         
         // 3. Fire the router transition push 
-        router.push("/dashboard/vendor/tickets");
+        router.push("/dashboard/vendor/my-added-tickets");
       } else {
         toast.error("Failed to save the ticket layout configuration.");
       }
@@ -470,7 +470,7 @@ export default function AddTicketForm() {
                   type="submit"
                   size="lg"
                   isLoading={isSubmitting}
-                  className="bg-[#006B4A] text-white font-medium shadow-sm hover:bg-[#00543A] px-6 rounded-xl flex items-center gap-2"
+                  className="bg-linear-to-r from-violet-500 via-purple-500 to-indigo-500 text-white font-medium shadow-sm hover:bg-[#00543A] px-6 rounded-xl flex items-center gap-2"
                 >
                   {!isSubmitting && <Plus className="w-5 h-5" />}
                   Create Ticket Listing
