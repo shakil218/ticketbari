@@ -1,8 +1,8 @@
 import TicketCard from "../tickets/TicketCard";
-import { getApprovedTickets } from "@/lib/api/tickets";
+import { getAllApprovedTickets } from "@/lib/api/tickets";
 
 export default async function AdvertisementTickets() {
-  const tickets = await getApprovedTickets();
+  const tickets = await getAllApprovedTickets();
 
   const advertiseTickets = tickets.filter(
     (ticket) => ticket.isAdvertised === true

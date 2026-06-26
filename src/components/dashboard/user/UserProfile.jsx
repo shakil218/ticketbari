@@ -113,6 +113,10 @@ export default function UserProfile({ user }) {
 
           {/* User Info */}
           <div className="flex-1 text-center md:text-left">
+            <p className="text-default-500 text-sm">
+    Welcome back 👋
+  </p>
+
             <h2 className="text-3xl font-bold">
               {user?.name || "User"}
             </h2>

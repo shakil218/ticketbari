@@ -41,6 +41,7 @@ export default function SearchBox({ onSearch }) {
                 onChange={handleChange}
                 placeholder="Dhaka"
                 className="w-full rounded-xl border px-4 py-3"
+                suppressHydrationWarning
               />
             </div>
 

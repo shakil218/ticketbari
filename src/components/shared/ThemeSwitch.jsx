@@ -11,9 +11,9 @@ export function ThemeSwitch() {
   };
 
   return (
-    <button onClick={toggleTheme} className="btn btn-ghost btn-circle">
+    <button onClick={toggleTheme} className="btn btn-ghost btn-circle" suppressHydrationWarning>
       {resolvedTheme === "dark" ? (
-        <Sun className="w-5 h-5 text-orange-400" suppressHydrationWarning />
+        <Sun className="w-5 h-5 text-orange-400" />
       ) : (
         <Moon className="w-5 h-5" />
       )}

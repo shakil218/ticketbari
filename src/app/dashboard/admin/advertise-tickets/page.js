@@ -1,8 +1,8 @@
 import AdvertiseTickets from "@/components/dashboard/admin/AdvertiseTickets";
-import { getApprovedTickets } from "@/lib/api/tickets";
+import { getAllApprovedTickets } from "@/lib/api/tickets";
 
 const AdvertiseTicketsPage = async () => {
-  const tickets = await getApprovedTickets();
+  const tickets = await getAllApprovedTickets();
 
   return (
     <AdvertiseTickets tickets={tickets} />
