@@ -1,8 +1,8 @@
 import AllTicketsClient from "@/components/tickets/AllTicketsClient";
-import { getAllTickets } from "@/lib/api/tickets";
+import { getApprovedTickets } from "@/lib/api/tickets";
 
 export default async function AllTicketsPage() {
-  const tickets = await getAllTickets();
+  const tickets = await getApprovedTickets();
 
   return <AllTicketsClient tickets={tickets} />;
 }

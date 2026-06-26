@@ -117,7 +117,6 @@ export default function UpdateTicketForm({ ticket }) {
       if (res?.success || res?.modifiedCount > 0) {
         toast.success("Ticket configurations modified successfully!");
         router.push("/dashboard/vendor/my-added-tickets");
-        router.refresh(); 
       } else {
         toast.error("No modifications detected or failed to save layout update.");
       }
