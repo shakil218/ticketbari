@@ -1,5 +1,16 @@
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
-import React from 'react';
+
+export const metadata = {
+  title: {
+    default: "Dashboard | TicketBari",
+    template: "%s | TicketBari",
+  },
+  description: "Manage your TicketBari account, bookings, tickets, and dashboard.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 const layout = ({children}) => {
   return (

@@ -2,6 +2,15 @@ import { redirect } from "next/navigation";
 import { stripe } from "@/lib/stripe";
 import { createPayment } from "@/lib/actions/payments";
 
+export const metadata = {
+  title: "Payment Successful | TicketBari",
+  description: "Your payment has been completed successfully.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default async function Success({
   searchParams,
 }) {

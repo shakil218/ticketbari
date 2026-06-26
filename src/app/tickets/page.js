@@ -1,6 +1,12 @@
 import AllTicketsClient from "@/components/tickets/AllTicketsClient";
 import { getApprovedTickets } from "@/lib/api/tickets";
 
+export const metadata = {
+  title: "TicketBari | All Tickets",
+  description:
+    "Browse and book bus, train, and launch tickets across Bangladesh. Find the best routes, schedules, and prices with TicketBari.",
+}
+
 export default async function AllTicketsPage({ searchParams }) {
   const params = await searchParams;
 

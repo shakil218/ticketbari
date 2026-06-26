@@ -33,7 +33,6 @@ export default function RevenueOverview() {
       
       try {
         setLoading(true);
-        // Using your structured helper utility
         const res = await getVendorAnalytics(user.email);
         
         if (res && res.success) {

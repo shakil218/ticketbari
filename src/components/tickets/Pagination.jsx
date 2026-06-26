@@ -94,7 +94,7 @@ export default function Pagination({
             onClick={() => goToPage(page)}
             className={`h-10 w-10 rounded-lg border transition ${
               currentPage === page
-                ? "bg-primary text-white border-primary"
+                ? "bg-primary text-violet-500 border-primary"
                 : "hover:bg-default-100"
             }`}
           >

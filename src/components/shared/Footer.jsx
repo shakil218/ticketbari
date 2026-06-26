@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FaFacebook, FaXTwitter, FaInstagram, FaLinkedin } from "react-icons/fa6";
+import { FaCcVisa, FaCcMastercard, FaCcAmex, FaCcDiscover, FaStripe, } from "react-icons/fa";
 import logo from "@/assets/logo.png";
 import Image from "next/image";
 
@@ -115,16 +116,25 @@ export default function Footer() {
               Payment Methods
             </h3>
 
-            <div className="flex items-center gap-3 text-sm text-foreground/70">
-              {/* Replace with real icons later */}
-              <div className="rounded-md border border-divider px-3 py-2">
-                Stripe
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2 rounded-lg border border-divider px-3 py-2">
+                <FaStripe className="text-2xl text-violet-600" />
+                <span>Stripe</span>
               </div>
-              <div className="rounded-md border border-divider px-3 py-2">
-                Card
+
+              <div className="flex items-center gap-2 rounded-lg border border-divider px-3 py-2">
+                <FaCcVisa className="text-2xl text-blue-600" />
+                <span>Visa</span>
               </div>
-              <div className="rounded-md border border-divider px-3 py-2">
-                Mobile Pay
+
+              <div className="flex items-center gap-2 rounded-lg border border-divider px-3 py-2">
+                <FaCcMastercard className="text-2xl text-red-500" />
+                <span>Mastercard</span>
+              </div>
+
+              <div className="flex items-center gap-2 rounded-lg border border-divider px-3 py-2">
+                <FaCcAmex className="text-2xl text-sky-500" />
+                <span>Amex</span>
               </div>
             </div>
           </div>

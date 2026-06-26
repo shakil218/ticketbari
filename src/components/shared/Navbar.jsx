@@ -22,7 +22,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
     { label: "All Tickets", href: "/tickets" },
-    { label: "Contact", href: "/contact" },
+    { label: "Help & Support", href: "/contact" },
   ];
 
   const dashboardLinks = {
@@ -33,7 +33,7 @@ export default function Navbar() {
 
   if (user?.email) {
     navLinks[3] = { label: "Dashboard", href: dashboardLinks[user?.role || "user"] };
-    navLinks[4] = { label: "Contact", href: "/contact" };
+    navLinks[4] = { label: "Help & Support", href: "/contact" };
   }
 
   const isActive = (href) => {
