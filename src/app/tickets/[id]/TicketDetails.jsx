@@ -71,6 +71,7 @@ export default function TicketDetails({ passenger, ticket }) {
       departureDate: ticket?.departureTime,
       bookingQuantity: quantity,
       totalPrice: price * quantity,
+      vendorEmail: ticket?.vendorEmail,
       passengerName: passenger?.name,
       passengerEmail: passenger?.email,
       passengerId: passenger?.id,

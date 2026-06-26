@@ -1,5 +1,5 @@
-import { serverFetch } from "../core/server";
+import { serverFetch,protectedFetch } from "../core/server";
 
 export const getVendorAnalytics = async (vendorEmail) => {
-  return serverFetch(`/api/vendor-analytics/${vendorEmail}`);
+  return protectedFetch(`/api/vendor-analytics/${vendorEmail}`);
 };

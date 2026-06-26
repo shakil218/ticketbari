@@ -1,9 +1,9 @@
-import { serverFetch } from "../core/server";
+import { serverFetch,protectedFetch } from "../core/server";
 
-export const getBookingTickets = async () => {
-  return serverFetch("/api/bookings");
-};
+export const getBookingsByVendor = async (vendorEmail) => {
+  return protectedFetch(`/api/bookings?vendorEmail=${vendorEmail}`);
+}; 
 
 export const getBookingsByPassenger = async (passengerId) => {
-  return serverFetch(`/api/bookings?passengerId=${passengerId}`);
+  return protectedFetch(`/api/bookings?passengerId=${passengerId}`);
 };

@@ -1,7 +1,7 @@
-import { serverFetch } from "../core/server";
+import { serverFetch , protectedFetch } from "../core/server";
 
 export const getAllTickets = async () => {
-  return serverFetch("/api/tickets");
+  return protectedFetch("/api/tickets");
 };
 
 export const getTicketById = async (id) => {
@@ -9,7 +9,7 @@ export const getTicketById = async (id) => {
 };
 
 export const getVendorTickets = async (vendorEmail) => {
-  return serverFetch(`/api/tickets?vendorEmail=${vendorEmail}`);
+  return protectedFetch(`/api/tickets?vendorEmail=${vendorEmail}`);
 };
 
 export const getApprovedTickets = async () => {
