@@ -13,7 +13,18 @@ export default function UserProfile({ user }) {
 
   const router = useRouter();
 
+  const isFraud =
+    user?.role === "vendor" &&
+    user?.isFraud === true;
+
   const handleImageUpdate = async (e) => {
+    if (isFraud) {
+      toast.error(
+        "Your vendor account has been suspended. You cannot update your profile photo."
+      );
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -80,7 +91,12 @@ export default function UserProfile({ user }) {
 
             <label
               htmlFor="profile-image"
-              className="absolute bottom-1 right-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-background text-foreground shadow-lg hover:scale-105 transition"
+              className={`absolute bottom-1 right-1 flex h-10 w-10 items-center justify-center rounded-full bg-background text-foreground shadow-lg transition
+                ${
+                  isFraud
+                    ? "cursor-not-allowed opacity-50"
+                    : "cursor-pointer hover:scale-105"
+                }`}
             >
               <Camera size={18} />
             </label>
@@ -89,7 +105,7 @@ export default function UserProfile({ user }) {
               id="profile-image"
               type="file"
               accept="image/*"
-              disabled={loading}
+              disabled={loading || isFraud}
               onChange={handleImageUpdate}
               className="hidden"
             />
@@ -106,11 +122,13 @@ export default function UserProfile({ user }) {
             </p>
 
             <Chip
-              color="primary"
-              variant="flat"
+              color={isFraud ? "danger" : "success"}
+              variant="soft"
               className="mt-4 capitalize"
             >
-              {user?.role || "user"}
+              {isFraud
+                ? "Vendor (Fraud)"
+                : user?.role || "user"}
             </Chip>
 
             {loading && (
@@ -130,8 +148,14 @@ export default function UserProfile({ user }) {
               Account Status
             </p>
 
-            <p className="font-semibold text-success">
-              Active
+            <p
+              className={`font-semibold ${
+                isFraud
+                  ? "text-danger"
+                  : "text-success"
+              }`}
+            >
+              {isFraud ? "Fraud" : "Active"}
             </p>
           </div>
 
@@ -141,12 +165,13 @@ export default function UserProfile({ user }) {
             </p>
 
             <p className="font-semibold">
-              {new Date().getFullYear()}
+              {new Date(
+                user?.createdAt || Date.now()
+              ).getFullYear()}
             </p>
           </div>
 
         </div>
-
       </Card>
     </div>
   );

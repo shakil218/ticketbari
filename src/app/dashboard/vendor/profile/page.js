@@ -1,17 +1,16 @@
-"use client"
+
 import LoadingSpinner from "@/app/loading";
-import VendorProfile from "@/components/dashboard/vendor/VendorProfile";
-import { authClient } from "@/lib/auth-client";
+import {getUserSession} from "@/lib/core/session";
+import UserProfile from "@/components/dashboard/user/UserProfile";
 
-export default function VendorProfilePage() {
-  const {data:session, isPending} = authClient.useSession()
+export default async function VendorProfilePage() {
+  
 
-  const user = session?.user;
-  console.log(user)
+  const user = await getUserSession();
+  
+  // if(isPending){
+  //   return <LoadingSpinner />
+  // }
 
-  if(isPending){
-    return <LoadingSpinner />
-  }
-
-  return <VendorProfile user={user} />;
+  return <UserProfile user={user} />;
 }

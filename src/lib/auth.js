@@ -15,7 +15,11 @@ export const auth = betterAuth({
     additionalFields:{
       role:{
         default:"user",
-      }
+      },
+      isFraud: {
+      type: "boolean",
+      defaultValue: false,
+    },
     }
   },
   
