@@ -1,4 +1,4 @@
-// app/dashboard/vendor/tickets/MyAddedTicketsClient.jsx
+
 "use client";
 import React, { useState } from "react";
 import { Card, Button, Chip } from "@heroui/react";
@@ -210,7 +210,7 @@ export default function VendorAddedTickets({ totalTickets }) {
                     {/* Operational Layout Modifiers / Buttons */}
                     <div className="grid grid-cols-2 gap-2.5">
                       <Link
-                        href={`/dashboard/vendor/tickets/update/${ticket._id}`}
+                        href={`/dashboard/vendor/my-added-tickets/update/${ticket._id}`}
                         size="sm"
                         variant="bordered"
                         className="rounded-xl font-medium border-default-300 hover:bg-default-100 flex items-center justify-center gap-1.5"

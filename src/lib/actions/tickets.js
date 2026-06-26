@@ -13,6 +13,10 @@ export const toggleTicketAdvertisement = async (id,isAdvertised) => {
   return serverMutation(`/api/tickets/advertise/${id}`,{ isAdvertised },"PATCH");
 };
 
+export const updateTicketWithVendor = async (id, ticketData) => {
+  return serverMutation(`/api/tickets/update/${id}`,ticketData,"PATCH");
+};
+
 export const deleteTicket = async (id) => {
   return serverMutation(`/api/tickets/${id}`,{}, "DELETE");
 };
