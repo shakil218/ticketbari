@@ -63,7 +63,7 @@ export default function WhyChooseUsSection() {
         {/* Header Section */}
         <div className="text-center mb-16 flex flex-col items-center">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight text-foreground">
-            Why Choose TicketBari?
+            Why Choose <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">TicketBari?</span>
           </h2>
           <p className="text-lg text-default-500 dark:text-default-400 max-w-xl">
             Experience hassle-free booking with our premium support, trusted partners, and unbeatable guarantees.

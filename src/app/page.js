@@ -1,4 +1,5 @@
 import AdvertisementTickets from "@/components/home/AdvertisementTickets";
+import FAQSection from "@/components/home/FAQSection";
 import HeroSlider from "@/components/home/HeroSlider";
 import LatestTickets from "@/components/home/LatestTickets";
 import PopularRoutes from "@/components/home/PopularRoutes";
@@ -15,6 +16,7 @@ export default function HomePage() {
       <PopularRoutes />
       <LatestTickets />
       <WhyChooseUs /> 
+      <FAQSection />
       <TicketBariCTA />
     </>
   );
