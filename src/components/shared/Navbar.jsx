@@ -51,7 +51,7 @@ export default function Navbar() {
             className="flex items-center gap-2 text-xl font-bold text-foreground"
           >
             <Image src={logo} alt="TicketBari Logo" width={40} height={40} />
-            <span className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
               TicketBari
             </span>
           </Link>
@@ -66,7 +66,7 @@ export default function Navbar() {
                     relative text-sm transition-colors duration-200
                     ${
                       isActive(link.href)
-                        ? "bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent border-b-2 border-purple-500 font-semibold"
+                        ? "bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent border-b-2 border-purple-500 font-semibold"
                         : "text-foreground/70 hover:text-primary"
                     }
                   `}
@@ -183,7 +183,7 @@ export default function Navbar() {
                       block rounded-lg px-3 py-3 text-sm
                       ${
                         isActive(link.href)
-                          ? "bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent border-b-2 border-purple-500 font-semibold"
+                          ? "bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent border-b-2 border-purple-500 font-semibold"
                           : "text-foreground/70 hover:text-primary"
                       }
                     `}

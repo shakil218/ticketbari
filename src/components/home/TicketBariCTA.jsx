@@ -27,7 +27,7 @@ export default function TicketBariCTA() {
           
           {/* Heading */}
           <h2 className="text-2xl md:text-4xl font-bold mb-3 text-white">
-            Ready to Book Your Next Journey?
+            Ready to <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">Book Your Next Journey?</span>
           </h2>
 
           {/* Subtext */}
@@ -40,7 +40,7 @@ export default function TicketBariCTA() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
               size="lg"
-              className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 text-black hover:opacity-90"
+              className="bg-linear-to-r from-violet-600 via-purple-500 to-purple-500 text-white hover:opacity-90"
               onPress={() => router.push("/tickets")}
             >
               Explore Tickets

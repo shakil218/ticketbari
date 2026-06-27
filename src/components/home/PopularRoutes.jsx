@@ -41,7 +41,7 @@ export default function PopularRoutes() {
         {/* Heading */}
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-foreground">
-            Explore Popular Routes
+            Explore <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">Popular Routes</span>
           </h2>
 
           <p className="mt-2 text-default-500">
@@ -138,7 +138,7 @@ export default function PopularRoutes() {
             </div>
 
             <h3 className="font-bold text-xl text-foreground">
-              View All Destinations
+              View All <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">Destinations</span>
             </h3>
 
             <p className="text-default-500 text-sm mt-2 mb-5">
@@ -146,7 +146,7 @@ export default function PopularRoutes() {
             </p>
 
             <Button
-              className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500"
+              className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 text-white"
               onPress={() => router.push("/routes")}
             >
               Explore Routes

@@ -77,10 +77,7 @@ export default function FAQSection() {
           </div>
 
           <h2 className="mt-5 text-3xl md:text-4xl font-bold">
-            Everything You Need to 
-            <span className="block bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
-                          Know
-                        </span>
+            Everything <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">You Need to Know</span>
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-default-500">

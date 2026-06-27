@@ -21,7 +21,7 @@ export default async function LatestTickets() {
         {/* Heading */}
         <div className="flex flex-col items-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold">
-            Latest Tickets
+            Latest <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">Tickets</span>
           </h2>
 
           <p className="text-default-500 mt-1 text-center">

@@ -27,7 +27,7 @@ export default function SearchBox({ onSearch }) {
         <div className="rounded-3xl border border-divider bg-background/95 p-6 shadow-2xl backdrop-blur-md">
 
           <h2 className="mb-6 text-center text-2xl font-bold">
-            Find Your Perfect Journey
+            <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">Find </span> Your Perfect Journey
           </h2>
 
           <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-5">

@@ -14,7 +14,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 text-xl font-bold text-foreground">
               <Image src={logo} alt="TicketBari Logo" width={50} height={50} />
-              <span className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent">TicketBari</span>
+              <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent">TicketBari</span>
             </div>
 
             <p className="mt-3 text-sm text-foreground/70">
@@ -142,7 +142,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-10 border-t border-divider pt-4 text-center text-sm text-foreground/60">
-          © {new Date().getFullYear()} <span className="bg-linear-to-r from-violet-200 via-purple-300 to-purple-500 bg-clip-text text-transparent font-semibold">TicketBari</span>. All rights reserved.
+          © {new Date().getFullYear()} <span className="bg-linear-to-r from-violet-600 via-purple-500 to-indigo-500 bg-clip-text text-transparent font-semibold">TicketBari</span>. All rights reserved.
         </div>
       </div>
     </footer>
